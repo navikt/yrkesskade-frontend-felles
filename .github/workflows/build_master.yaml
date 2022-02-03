@@ -1,0 +1,46 @@
+name: Build-Deploy-Npm
+on:
+  push:
+    branches:
+      - 'master'
+    paths-ignore:
+      - package.json
+
+jobs:
+  build-and-push-to-npm:
+    name: Bygg og push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Prepare repository
+        run: git checkout "${GITHUB_REF:11}"
+
+      - name: Installer dependencies
+        run: |
+          yarn
+          yarn build
+      - name: Login
+        run: |
+          git config user.email "yrkesskade@nav.no"
+          git config user.name "Team Yrkesskade"
+          git remote set-url origin https://github-actions[bot]:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a .npmrc file for the github package repository
+        uses: FerLuisxd/create-npmrc@3
+        with:
+          org_name: navikt
+        env:
+          AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Push
+        run: |
+          yarn deploy-storybook
+          npm run publish:ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
