@@ -1,2 +1,9 @@
 node_modules
 dist
+tsconfig.tsbuildinfo
+.docz
+docs
+*.log
+.idea
+*.d.ts
+.yarnrc
