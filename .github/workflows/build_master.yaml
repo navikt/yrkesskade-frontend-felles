@@ -21,6 +21,9 @@ jobs:
         run: |
           yarn
           yarn build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
+          
       - name: Login
         run: |
           git config user.email "yrkesskade@nav.no"
