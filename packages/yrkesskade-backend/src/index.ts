@@ -1,14 +1,22 @@
 import express, { Express, Request, Response, Router } from 'express';
-import { Client } from 'openid-client';
 import passport from 'passport';
 import { Counter, Registry } from 'prom-client';
-import konfigurerSession from './auth/session';
 import konfigurerPassport from './auth/azure/passport';
-import { ISessionKonfigurasjon } from './typer';
+import konfigurerSession from './auth/session';
+import headers from './headers';
 import { konfigurerMetrikker } from './metrikker';
-import { logError, logInfo } from '@navikt/familie-logging';
-import axios from 'axios';
 import konfigurerRouter from './router';
+import { ISessionKonfigurasjon } from './typer';
+import { Client } from 'openid-client';
+import { logError } from '@navikt/familie-logging';
+
+export * from './auth/authenticate';
+export * from './auth/tokenUtils';
+export * from './config';
+export * from './typer';
+export * from './utils';
+export * from 'openid-client';
+export * from 'prom-client';
 
 export interface IApp {
     app: Express;
@@ -25,20 +33,11 @@ export default async (
     let azureAuthClient!: Client;
     let router: Router;
 
-    // kubernetes actuators - brukes for å sjekke om backend er oppe og lever
+    headers.setup(app);
+
     app.get('/isAlive', (_req: Request, res: Response) => res.status(200).end());
     app.get('/isReady', (_req: Request, res: Response) => res.status(200).end());
     const prometheusRegistry: Registry = konfigurerMetrikker(app, prometheusTellere);
-
-    // hvis i local env så bruker vi fakedings til å gi oss en token
-    if (process.env.ENV === 'local') {
-        app.get('/oauth2/login', async (_req: Request, res: Response) => {
-            logInfo('Henter Fakedings AAD token');
-            const token = await axios.get('https://fakedings.dev-gcp.nais.io/fake/aad');
-            res.setHeader('Authorization', 'Bearer ' + token);
-            res.redirect('/');
-        });
-    }
 
     konfigurerSession(app, passport, sessionKonfigurasjon);
 

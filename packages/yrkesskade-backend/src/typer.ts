@@ -16,8 +16,8 @@ export interface IAppConfig {
     discoveryUrl: string;
     clientId: string;
     clientSecret: string;
-    redirectUri?: string;
-    logoutRedirectUri?: string;
+    redirectUri: string;
+    logoutRedirectUri: string;
     sessionSecret: string;
 }
 

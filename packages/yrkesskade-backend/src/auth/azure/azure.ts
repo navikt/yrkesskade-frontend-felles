@@ -1,28 +1,33 @@
-import { Client, ClientMetadata, Issuer, Strategy, StrategyOptions, TokenSet } from 'openid-client';
+import {
+    Client,
+    ClientMetadata,
+    custom,
+    Issuer,
+    Strategy,
+    StrategyOptions,
+    TokenSet,
+} from 'openid-client';
 import { appConfig } from '../../config';
 import { logInfo, logDebug } from '@navikt/familie-logging';
-//import httpProxy from '../proxy/http-proxy';
+import httpProxy from '../proxy/http-proxy';
 import { appendDefaultScope, tokenSetSelfId } from '../tokenUtils';
 
 const metadata: ClientMetadata = {
-    // eslint-disable-next-line @typescript-eslint/camelcase
     client_id: appConfig.clientId,
-    // eslint-disable-next-line @typescript-eslint/camelcase
     client_secret: appConfig.clientSecret,
-    // eslint-disable-next-line @typescript-eslint/camelcase
+    redirect_uris: [appConfig.redirectUri],
     token_endpoint_auth_method: 'client_secret_post',
 };
 
 const hentClient = (): Promise<Client> => {
-    /*if (httpProxy.agent) {
+    if (httpProxy.agent) {
         custom.setHttpOptionsDefaults({
             agent: {
                 http: httpProxy.agent,
                 https: httpProxy.agent,
             },
         });
-    }*/
-    logInfo(`Kontakter discovery url: ${appConfig.discoveryUrl}`);
+    }
     return Issuer.discover(appConfig.discoveryUrl).then((issuer: Issuer<Client>) => {
         logInfo(`Discovered issuer ${issuer.issuer}`);
         return new issuer.Client(metadata);
@@ -47,9 +52,7 @@ const strategy = (client: Client) => {
     const options: StrategyOptions<Client> = {
         client,
         params: {
-            // eslint-disable-next-line @typescript-eslint/camelcase
             response_mode: 'query',
-            // eslint-disable-next-line @typescript-eslint/camelcase
             response_types: ['code'],
             scope: `openid offline_access ${appendDefaultScope(appConfig.clientId)}`,
         },

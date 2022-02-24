@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { Client, TokenSet } from 'openid-client';
-import { logError, LOG_LEVEL, logInfo } from '@navikt/familie-logging';
+import { logInfo, logError, LOG_LEVEL } from '@navikt/familie-logging';
 import { IApi } from '../typer';
 import { logRequest } from '../utils';
 
@@ -22,11 +22,8 @@ export const getOnBehalfOfAccessToken = (
             authClient
                 .grant({
                     assertion: req.session.passport.user.tokenSets[tokenSetSelfId].access_token,
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    // eslint-disable-next-line @typescript-eslint/camelcase
                     requested_token_use: 'on_behalf_of',
                     scope: createOnBehalfOfScope(api),
                 })

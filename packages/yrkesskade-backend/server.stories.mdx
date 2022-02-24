@@ -2,9 +2,9 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Backend/Server" />
 
-# Yrkesskade backend
+# Familie backend
 
-Node.js backend med express for Yrkesskade frontend apper.
+Node.js backend med express for familie frontend apper.
 Setter opp en express app med azure autentisering og logging.
 Kan konfigureres til å bruke redis gjennom egen konfigurasjon.
 
@@ -23,6 +23,7 @@ const sessionConfig: ISessionKonfigurasjon = {
 export const saksbehandlerTokenConfig: ITokenRequest = {
     clientId: '<applikasjon_id fra aad app>',
     clientSecret: '<SECRET fra aad app>',
+    redirectUrl: redirectUrl,
     scope: `${'<applikasjon_id fra aad app>'}/.default`,
     tokenUri: tokenURI,
 };
@@ -30,6 +31,7 @@ export const saksbehandlerTokenConfig: ITokenRequest = {
 export const oboTokenConfig: ITokenRequest = {
     clientId: '<applikasjon_id fra aad app>',
     clientSecret: '<SECRET fra aad app>',
+    redirectUrl: redirectUrl,
     scope: 'scope mot backend tjenesten',
     tokenUri: tokenURI,
 };
