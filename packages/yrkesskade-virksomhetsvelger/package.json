@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-virksomhetsvelger",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Virksomhetsvelger for yrkesskade frontend",
   "author": "NAV",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@navikt/ds-icons": "^0.5.4",
+    "@navikt/fnrvalidator": "^1.1.4",
     "@types/react": "^17.0.1",
     "@types/react-aria-menubutton": "^6.2.8",
     "@types/react-collapse": "^5.0.0",
@@ -40,8 +41,7 @@
     "nav-frontend-core": "^6.0.1",
     "nav-frontend-typografi": "^4.0.1",
     "nav-frontend-typografi-style": "^2.0.1",
-    "react-aria-menubutton": "^7.0.3",
-    "@navikt/fnrvalidator": "^1.1.4"
+    "react-aria-menubutton": "^7.0.3"
   },
   "resolutions": {
     "cache-manager": "2.10.0"
