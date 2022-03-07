@@ -1,0 +1,92 @@
+@import '~nav-frontend-core/less/_variabler';
+
+.underenhetsvelger {
+    ul {
+        background-color: white;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    #valgtjuridiskenhet {
+        svg g {
+            stroke: white;
+            fill: @navMorkGra;
+        }
+    }
+
+    &__button {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 1rem;
+        position: relative;
+        height: 6rem;
+        border: none;
+        border-top: 1px solid #979797;
+        background-color: white;
+        cursor: pointer;
+
+        &:focus {
+            box-shadow: inset 0 0 0 3px @fokusFarge;
+            outline: none;
+        }
+        &:active {
+            background-color: @navBlaDarken40;
+        }
+
+        &:hover {
+            color: white;
+            background-color: @navBla;
+            svg g {
+                stroke: white;
+                fill: none;
+            }
+        }
+
+        &__chevron {
+            &--apen,
+            &--lukket {
+                position: absolute;
+                right: 1rem;
+                bottom: 2rem;
+                transition: 0.2s ease;
+                transform: rotateX(0);
+            }
+            &--apen {
+                transform: rotateX(-180deg);
+            }
+        }
+
+        &__label {
+            position: absolute;
+            bottom: 0.5rem;
+            left: 3.5rem;
+        }
+    }
+
+    &__menyvalg-wrapper {
+        &--lukket,
+        &--apen {
+            visibility: hidden;
+            transform: rotateX(-90deg);
+            transform-origin: top center;
+            opacity: 0.3;
+            transition: 0.3s ease;
+            max-height: 0;
+
+            .underenhet {
+                max-height: 20rem;
+                padding: 0.5rem 0.5rem 0.5rem 2.4rem;
+            }
+        }
+
+        &--apen {
+            visibility: visible;
+            max-height: max-content;
+            opacity: 1;
+            transition: 0.4s ease;
+            transform: rotateX(0deg);
+        }
+    }
+}

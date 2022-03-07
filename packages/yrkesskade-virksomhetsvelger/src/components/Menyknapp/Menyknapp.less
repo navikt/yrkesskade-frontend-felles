@@ -1,0 +1,76 @@
+@import '~nav-frontend-core/less/_variabler';
+
+.menyknapp {
+    background-color: white;
+    border: 2px solid #78706a;
+    padding: 0.5rem 0.7rem 0.5rem 1rem;
+    width: 18rem;
+    cursor: pointer;
+    border-radius: 4px;
+
+    @media (min-width: @screen-sm-min) {
+        width: 20rem;
+    }
+
+    &:hover {
+        background-color: @navBla;
+    }
+
+    &:active {
+        background-color: @navBlaDarken40;
+    }
+
+    &:active,
+    &:hover {
+        color: white;
+        svg g {
+            stroke: white;
+        }
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px @fokusFarge;
+    }
+
+    &__innhold {
+        display: flex;
+        position: relative;
+
+        .menyknapp-ikon {
+            display: flex;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+
+        .menyknapp-beskrivelse {
+            overflow: hidden;
+            text-align: left;
+            width: 12rem;
+            @media (min-width: @screen-sm-min) {
+                width: 14.5rem;
+            }
+
+            .menyknapp-navn {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
+    }
+
+    &__chevron {
+        &--ned,
+        &--opp {
+            transition: 0.6s ease;
+            position: absolute;
+            right: 0;
+            margin-top: 0.7rem;
+        }
+        &--ned {
+            transform: rotateX(-180deg);
+        }
+    }
+}

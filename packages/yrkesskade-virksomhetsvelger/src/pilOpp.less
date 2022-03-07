@@ -1,0 +1,30 @@
+@import '~nav-frontend-core/less/_variabler';
+
+.pilOpp {
+    &:before,
+    &:after {
+        content: '\0020';
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: -18.5px;
+        right: 30%;
+        width: 0;
+        height: 0;
+        border: solid 20px transparent;
+        border-top: 0;
+        border-bottom-color: #fff;
+    }
+
+    &:before {
+        top: -22px;
+        border-bottom-color: #194d62;
+    }
+
+    @media (max-width: @screen-md-min) {
+        &:before,
+        &:after {
+            right: 45%;
+        }
+    }
+}

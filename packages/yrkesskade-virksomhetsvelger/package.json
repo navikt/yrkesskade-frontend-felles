@@ -1,0 +1,50 @@
+{
+  "name": "@navikt/yrkesskade-virksomhetsvelger",
+  "version": "0.0.18",
+  "description": "Virksomhetsvelger for yrkesskade frontend",
+  "author": "NAV",
+  "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/navikt/yrkesskade-frontend-felles"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn run clean && yarn run copy-less && yarn run tsc",
+    "clean": "rm -rf ./dist",
+    "copy-less": "copyfiles -u 1 src/**/*.less dist",
+    "tsc": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@types/amplitude-js": "^8.9.4",
+    "fuzzysort": "^1.1.4"
+  },
+  "devDependencies": {
+    "@navikt/ds-icons": "^0.5.4",
+    "@types/react": "^17.0.1",
+    "@types/react-aria-menubutton": "^6.2.8",
+    "@types/react-collapse": "^5.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.7",
+    "nav-frontend-chevron": "^1.0.30",
+    "nav-frontend-chevron-style": "^1.0.4",
+    "nav-frontend-core": "^6.0.1",
+    "nav-frontend-typografi": "^4.0.1",
+    "nav-frontend-typografi-style": "^2.0.1",
+    "react-aria-menubutton": "^7.0.3",
+    "@navikt/fnrvalidator": "^1.1.4"
+  },
+  "resolutions": {
+    "cache-manager": "2.10.0"
+  },
+  "snyk": true
+}

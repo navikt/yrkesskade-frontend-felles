@@ -1,0 +1,36 @@
+@import '~nav-frontend-core/less/_variabler';
+
+.organisasjonsbeskrivelse {
+    display: flex;
+    align-items: center;
+    width: 16rem;
+
+    @media (min-width: 375px) {
+        width: 18.5rem;
+    }
+
+    @media (min-width: @screen-sm-min) {
+        width: 22rem;
+    }
+
+    &__ikon {
+        height: 2rem;
+        width: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    &__beskrivelse {
+        overflow: hidden;
+        text-align: left;
+    }
+
+    &__navn {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+}
