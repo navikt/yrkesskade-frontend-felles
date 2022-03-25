@@ -27,8 +27,6 @@ export const Personvelger = (props: Props) => {
         console.log('keypress');
     };
 
-    const farger = ['d46197', 'a2a1bf', '2bf094', 'bcbdaf', 'dcdea2'];
-
     return (
         <div>
             {personer &&
@@ -47,7 +45,7 @@ export const Personvelger = (props: Props) => {
                                 alignItems: 'center',
                             }}
                         >
-                            <PersonIkon farge={`#${farger[index % 5]}`} />
+                            <PersonIkon type={person.type} />
                             <div>
                                 <LinkPanel.Title className="navn">{person.navn}</LinkPanel.Title>
                                 <LinkPanel.Description className="beskrivelse">
