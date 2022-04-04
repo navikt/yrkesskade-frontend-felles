@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useSteps } from '../context/StepsProvider';
+import { useSteps } from './StepsProvider';
 import { BodyShort } from '@navikt/ds-react';
 import './StepIndicator.less';
-import { ISteps } from '../types/step';
-import check from './check.svg';
+import { ISteps } from './types/step';
+import check from './assets/icons/check.svg';
 
 export const StepIndicator = () => {
     const { pathname } = useLocation();
