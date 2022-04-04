@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-stepindicator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Personvelger for yrkesskade frontend",
   "author": "NAV",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
