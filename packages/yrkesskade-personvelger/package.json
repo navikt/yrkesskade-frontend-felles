@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-personvelger",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Personvelger for yrkesskade frontend",
   "author": "NAV",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
