@@ -35,6 +35,10 @@ export const StepIndicator = () => {
 
         if (steps?.details) {
             const index = steps.details.findIndex(page => page.pathmatch === pathname);
+            if (index < 0) {
+                // path not found
+                return;
+            }
             updateSteps(index + 1, steps);
         }
     }, [pathname]);
