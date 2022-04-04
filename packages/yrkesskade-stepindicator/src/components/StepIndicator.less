@@ -1,0 +1,77 @@
+@import "@navikt/ds-css";
+
+
+.Stepcontainer {
+  max-height: 1200px;
+  margin: 0 auto;
+}
+
+.step-indicator {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  // padding: 0 40px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  // flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+.step-indicator .step-icon {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--navds-semantic-color-interaction-primary-hover-subtle);
+  font-size: 10px;
+  text-align: center;
+  color: var(--navds-semantic-color-interaction-primary-hover-subtle);
+  position: relative;
+  line-height: 32px;
+  font-size: 20px;
+  transition: all .4s ease-in-out;
+}
+
+.step.active .step-icon {
+  background: var(--navds-semantic-color-interaction-primary);
+  border: 2px solid var(--navds-semantic-color-interaction-primary);
+}
+.step.done .step-icon {
+  background: var(--navds-semantic-color-feedback-success-border);
+  border: 2px solid var(--navds-semantic-color-feedback-success-border);
+}
+
+.step p {
+  // text-align: center;
+  margin-left: 10px;
+  color: #c2c2c2;
+}
+
+.step.active p {
+  color: var(--navds-semantic-text-default);
+}
+.step.done p {
+  color: var(--navds-semantic-text-link);
+}
+
+.indicator-line {
+  width: 2px;
+  height: 40px;
+  background: #c2c2c2;
+  margin: 5px 15px;
+}
+
+.indicator-line.active, .indicator-line.done {
+  background: #A0A0A0;
+}
+
+@media screen and (max-width: 500px) {
+  .step p {
+    // font-size: 11px;
+    bottom: -20px;
+  }
+}

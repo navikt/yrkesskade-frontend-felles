@@ -1,0 +1,42 @@
+{
+  "name": "@navikt/yrkesskade-stepindicator",
+  "version": "0.0.1",
+  "description": "Personvelger for yrkesskade frontend",
+  "author": "NAV",
+  "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/navikt/yrkesskade-frontend-felles"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn run clean && yarn run copy-less && yarn run tsc",
+    "clean": "rm -rf ./dist",
+    "copy-less": "copyfiles -u 1 src/**/*.less dist",
+    "tsc": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@types/amplitude-js": "^8.9.4",
+    "fuzzysort": "^1.1.4"
+  },
+  "devDependencies": {
+    "@navikt/ds-css": "^0.16.9",
+    "@navikt/ds-icons": "^0.8.6",
+    "@navikt/ds-react": "^0.17.13",
+    "react-aria-menubutton": "^7.0.3",
+    "react-router": "^6.3.0"
+  },
+  "resolutions": {
+    "cache-manager": "2.10.0"
+  },
+  "snyk": true
+}
