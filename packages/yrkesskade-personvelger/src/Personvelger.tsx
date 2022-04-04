@@ -12,10 +12,12 @@ interface Props {
 }
 export const Personvelger = (props: Props) => {
     const { personer, onPersonChange } = props;
-    const [valgtPerson, setValgtPerson] = useState<Person>(personer[0]);
+    const [valgtPerson, setValgtPerson] = useState<Person | undefined>();
 
     useEffect(() => {
-        onPersonChange(valgtPerson);
+        if (valgtPerson) {
+            onPersonChange(valgtPerson);
+        }
     }, [valgtPerson]);
 
     const handleClick = (person: Person) => {
