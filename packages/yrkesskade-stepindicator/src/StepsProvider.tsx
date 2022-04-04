@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { ISteps } from '../types/step';
+import { ISteps } from './types/step';
 
 type Props = {
     stepsDefinition: ISteps;
