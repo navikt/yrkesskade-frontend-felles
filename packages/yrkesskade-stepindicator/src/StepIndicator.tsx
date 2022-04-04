@@ -4,7 +4,7 @@ import { useSteps } from './StepsProvider';
 import { BodyShort } from '@navikt/ds-react';
 import './StepIndicator.less';
 import { ISteps } from './types/step';
-import check from './assets/icons/check.svg';
+import check from './check.svg';
 
 export const StepIndicator = () => {
     const { pathname } = useLocation();
