@@ -21,13 +21,11 @@ export const Personvelger = (props: Props) => {
     }, [valgtPerson]);
 
     const handleClick = (person: Person) => {
-        console.log('person: ', person);
         setValgtPerson(person);
     };
 
-    const handleKeyPress = () => {
-        console.log('keypress');
-    };
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const handleKeyPress = () => {};
 
     return (
         <div>

@@ -1,24 +1,31 @@
-import { People } from '@navikt/ds-icons';
-import React from 'react';
+import { Child, Infants, People } from '@navikt/ds-icons';
+import React, { ReactElement } from 'react';
 import { PersonType } from '../../types/person';
 
 interface PersonIkonProps {
     type: PersonType;
 }
-export const PersonIkon = (props: PersonIkonProps) => {
-    const fargepalette = ['#EFECF4', '#634689', '#EFF1F8', '#005B82', '#F9FCCC', '#666E00'];
 
-    const kalkulerFarge = (type: PersonType) => {
+interface FargeOgIkon {
+    farge: string;
+    ikon: ReactElement;
+}
+
+export const PersonIkon = (props: PersonIkonProps) => {
+    const fargepalette = ['#EFECF4', '#E6F1F8', '#F9FCCC'];
+
+    const kalkuler = (type: PersonType): FargeOgIkon => {
         switch (type) {
             case PersonType.BARN:
-                return fargepalette[2];
+                return { farge: fargepalette[1], ikon: <Child /> };
             case PersonType.BABY:
-                return fargepalette[4];
+                return { farge: fargepalette[2], ikon: <Infants /> };
             default:
-                return fargepalette[0];
+                return { farge: fargepalette[0], ikon: <People /> };
         }
     };
-    const farge = kalkulerFarge(props.type);
+
+    const { farge, ikon } = kalkuler(props.type);
 
     return (
         <span
@@ -27,7 +34,7 @@ export const PersonIkon = (props: PersonIkonProps) => {
                 backgroundColor: farge,
             }}
         >
-            <People />
+            {ikon}
         </span>
     );
 };
