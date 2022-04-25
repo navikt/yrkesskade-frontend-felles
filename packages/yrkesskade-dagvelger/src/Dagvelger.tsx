@@ -9,7 +9,6 @@ import 'react-day-picker/dist/style.css';
 import styles from 'react-day-picker/dist/style.module.css';
 import './Dagvelger.less';
 import nb from 'date-fns/locale/nb';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export const Dagvelger: React.FC<
     React.HTMLAttributes<HTMLInputElement> & DagvelgerProps & DayPickerProps

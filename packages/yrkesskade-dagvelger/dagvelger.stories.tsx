@@ -1,4 +1,4 @@
-import { BodyLong, Heading } from '@navikt/ds-react';
+import { BodyLong } from '@navikt/ds-react';
 import React, { useState } from 'react';
 import { Dagvelger } from './src';
 
