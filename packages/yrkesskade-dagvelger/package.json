@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-daypicker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "NAV",
   "description": "En dagvelger komponent som kombinerer NAV designsymstem Input og react-day-picker",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
