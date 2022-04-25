@@ -1,0 +1,35 @@
+@import '@navikt/ds-css';
+
+:root {
+    --rdp-cell-size: 40px;
+    --rdp-accent-color: var(--navds-semantic-color-interaction-primary-hover);
+    --rdp-background-color: var(--navds-semantic-color-interaction-primary-hover-subtle);
+    /* Switch to dark colors for dark themes */
+    --rdp-accent-color-dark: var(--navds-semantic-color-interaction-primary);
+    --rdp-background-color-dark: var(--navds-semantic-color-interaction-primary);
+    /* Outline border for focused elements */
+    --rdp-outline: 2px solid var(--rdp-accent-color);
+    /* Outline border for focused and selected elements */
+    --rdp-outline-selected: 2px solid var(--navds-semantic-color-interaction-primary);
+
+  }
+
+.navds-day-picker-overlay {
+    background-color: #FFFFFF;
+    border: 1px solid var(--navds-text-field-color-border);
+    box-shadow: var(--navds-shadow-focus);
+    outline: none;
+    border-radius: var(--navds-border-radius-medium);
+    margin-top: 0.5em;
+    padding: 0.5em;
+}
+
+.navds-day-picker-selected {
+    color: var(--navds-semantic-color-text-inverted);
+    background-color: var(--navds-semantic-color-interaction-primary);
+    border-color: var(--navds-semantic-color-interaction-primary);
+
+    &:hover {
+        color: var(--navds-semantic-color-text)
+    }
+}

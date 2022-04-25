@@ -2505,6 +2505,11 @@
     react-popper "^2.2.5"
     uuid "^8.3.2"
 
+"@navikt/ds-tokens@^0.8.7":
+  version "0.8.7"
+  resolved "https://npm.pkg.github.com/download/@navikt/ds-tokens/0.8.7/976e2cf2d779cdc8bdd8f35d04f4a11adcf2f384f0087285264d1d73a9c856c6#ee7cfa34c924502285a3f94de3552f70b824877b"
+  integrity sha512-RMJLsF50urpieJKOQFS/cEzU7YLCiln6V695DsBhja74+gSe3lXzLucwneheKu9jn3eouA2vPANro05PMUn7lQ==
+
 "@navikt/familie-logging@^2.0.0":
   version "2.0.0"
   resolved "https://npm.pkg.github.com/download/@navikt/familie-logging/2.0.0/a36fbf16e65ba0de20254fa372d59c57f7f59590580e84b40be8a182fca4a106#a6b041899d45671529d5565a75ecdc9bab68063a"
@@ -2824,6 +2829,22 @@
   integrity sha512-+wdeS51Y+E1q1Wmd+1xSSbesZkpVj4jsg0BojCbopWvgq5iBvixw5vgemscdh58ep98BwUbsFYnrywFhV9yrVg==
   dependencies:
     "@babel/runtime" "^7.13.10"
+
+"@reach/auto-id@^0.16.0":
+  version "0.16.0"
+  resolved "https://registry.npmjs.org/@reach/auto-id/-/auto-id-0.16.0.tgz#dfabc3227844e8c04f8e6e45203a8e14a8edbaed"
+  integrity sha512-5ssbeP5bCkM39uVsfQCwBBL+KT8YColdnMN5/Eto6Rj7929ql95R3HZUOkKIvj7mgPtEb60BLQxd1P3o6cjbmg==
+  dependencies:
+    "@reach/utils" "0.16.0"
+    tslib "^2.3.0"
+
+"@reach/utils@0.16.0":
+  version "0.16.0"
+  resolved "https://registry.npmjs.org/@reach/utils/-/utils-0.16.0.tgz#5b0777cf16a7cab1ddd4728d5d02762df0ba84ce"
+  integrity sha512-PCggBet3qaQmwFNcmQ/GqHSefadAFyNCUekq9RrWoaU9hh/S4iaFgf2MBMdM47eQj5i/Bk0Mm07cP/XPFlkN+Q==
+  dependencies:
+    tiny-warning "^1.0.3"
+    tslib "^2.3.0"
 
 "@semantic-release/commit-analyzer@^6.1.0":
   version "6.3.3"
@@ -6683,6 +6704,11 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
+date-fns@^2.28.0:
+  version "2.28.0"
+  resolved "https://registry.npmjs.org/date-fns/-/date-fns-2.28.0.tgz#9570d656f5fc13143e50c975a3b6bbeb46cd08b2"
+  integrity sha512-8d35hViGYx/QH0icHYCeLmsLmMUheMmTyV9Fcm6gvNwdw31yXXH+O85sOBJ+OLnLQMKZowvpKb6FgMIQjcpvQw==
+
 dateformat@^3.0.0:
   version "3.0.3"
   resolved "https://registry.npmjs.org/dateformat/-/dateformat-3.0.3.tgz#a6e37499a4d9a9cf85ef5872044d62901c9889ae"
@@ -8116,6 +8142,20 @@ focus-group@^0.3.1:
   version "0.3.1"
   resolved "https://registry.npmjs.org/focus-group/-/focus-group-0.3.1.tgz#e0f32ed86b0dabdd6ffcebdf898ecb32e47fedce"
   integrity sha1-4PMu2GsNq91v/OvfiY7LMuR/7c4=
+
+focus-trap-react@^8.9.2:
+  version "8.9.2"
+  resolved "https://registry.npmjs.org/focus-trap-react/-/focus-trap-react-8.9.2.tgz#af19c6d65bedeba925859d7ec51c41d8d2c30855"
+  integrity sha512-m6TQQHLcqkisc6Qq92q1yYzzOaxo34Szh5FQOXzky7028PXFEhuUxScTbT7EG9qL0QG7B+oR2ZbxyU0lK4kIwQ==
+  dependencies:
+    focus-trap "^6.7.3"
+
+focus-trap@^6.7.3:
+  version "6.8.1"
+  resolved "https://registry.npmjs.org/focus-trap/-/focus-trap-6.8.1.tgz#0c9e4e44db8f7242f3d4b1056a518747d9c97125"
+  integrity sha512-sdz/jAPiP/9cyElo31+X3/estGPi6wgHutg+R/3MFmJtMM5AeeBlFGplejQyy89Ouyds/9xW+qPEH3jFlOAuKg==
+  dependencies:
+    tabbable "^5.3.1"
 
 follow-redirects@^1.14.0:
   version "1.14.9"
@@ -12799,6 +12839,13 @@ react-colorful@^5.1.2:
   resolved "https://registry.npmjs.org/react-colorful/-/react-colorful-5.5.1.tgz#29d9c4e496f2ca784dd2bb5053a3a4340cfaf784"
   integrity sha512-M1TJH2X3RXEt12sWkpa6hLc/bbYS0H6F4rIqjQZ+RxNBstpY67d9TrFXtqdZwhpmBXcCwEi7stKqFue3ZRkiOg==
 
+react-day-picker@^8.0.4:
+  version "8.0.4"
+  resolved "https://registry.npmjs.org/react-day-picker/-/react-day-picker-8.0.4.tgz#1d6f2627ecec30752bbfd706edd6e664b1a04ed1"
+  integrity sha512-RaGClmZjCgDl0O8OlgMnhtUBZgmSWNTv6p5TUXo8E9VudMPL9azAR9UCqF0JQxcDPLbjLgeMZnm53K0rWtRLCQ==
+  dependencies:
+    "@reach/auto-id" "^0.16.0"
+
 react-docgen-typescript@^2.0.0:
   version "2.2.2"
   resolved "https://registry.npmjs.org/react-docgen-typescript/-/react-docgen-typescript-2.2.2.tgz#4611055e569edc071204aadb20e1c93e1ab1659c"
@@ -14549,6 +14596,11 @@ synchronous-promise@^2.0.15:
   resolved "https://registry.npmjs.org/synchronous-promise/-/synchronous-promise-2.0.15.tgz#07ca1822b9de0001f5ff73595f3d08c4f720eb8e"
   integrity sha512-k8uzYIkIVwmT+TcglpdN50pS2y1BDcUnBPK9iJeGu0Pl1lOI8pD6wtzgw91Pjpe+RxtTncw32tLxs/R0yNL2Mg==
 
+tabbable@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.npmjs.org/tabbable/-/tabbable-5.3.1.tgz#059f2a19b829efce2a0ec05785a47dd3bcd0a25b"
+  integrity sha512-NtO7I7eoAHR+JwwcNsi/PipamtAEebYDnur/k9wM6n238HHy/+1O4+7Zx7e/JaDAbKJPlIFYsfsV/6tPqTOQvg==
+
 table@^6.0.9:
   version "6.8.0"
   resolved "https://registry.npmjs.org/table/-/table-6.8.0.tgz#87e28f14fa4321c3377ba286f07b79b281a3b3ca"
@@ -14768,7 +14820,7 @@ timers-browserify@^2.0.4:
   dependencies:
     setimmediate "^1.0.4"
 
-tiny-warning@^1.0.2:
+tiny-warning@^1.0.2, tiny-warning@^1.0.3:
   version "1.0.3"
   resolved "https://registry.npmjs.org/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
