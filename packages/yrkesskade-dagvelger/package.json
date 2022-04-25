@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-dagvelger",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "NAV",
   "description": "En dagvelger komponent som kombinerer NAV designsymstem TextField og react-day-picker",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
@@ -30,10 +30,10 @@
     "@navikt/ds-css": "^0.16.9",
     "@navikt/ds-icons": "^0.8.6",
     "@navikt/ds-react": "^0.17.13",
+    "@navikt/ds-tokens": "^0.8.7",
     "date-fns": "^2.28.0",
     "focus-trap-react": "^8.9.2",
     "react-day-picker": "^8.0.4",
-    "react-popper": "^2.2.5",
-    "@navikt/ds-tokens": "^0.8.7"
+    "react-popper": "^2.2.5"
   }
 }
