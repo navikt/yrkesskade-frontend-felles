@@ -1,5 +1,5 @@
-import React, { ChangeEventHandler, useRef, useState, KeyboardEvent, MouseEvent } from 'react';
-import { TextField } from '@navikt/ds-react';
+import React, { ChangeEventHandler, useRef, useState, FocusEvent } from 'react';
+import { Button, Label, TextField } from '@navikt/ds-react';
 import { DagvelgerProps } from './DagvelgerProps';
 import { format, isValid, parse } from 'date-fns';
 import FocusTrap from 'focus-trap-react';
@@ -9,11 +9,13 @@ import 'react-day-picker/dist/style.css';
 import styles from 'react-day-picker/dist/style.module.css';
 import './Dagvelger.less';
 import nb from 'date-fns/locale/nb';
+import { Calender } from '@navikt/ds-icons';
 
 export const Dagvelger: React.FC<
     React.HTMLAttributes<HTMLInputElement> & DagvelgerProps & DayPickerProps
 > = props => {
     const FORMAT = 'dd.MM.yyyy';
+    const possibleInputFormat = ['ddMMyy', 'ddMMyyyy', FORMAT];
     const datoformat = props.format || FORMAT;
     const [selected, setSelected] = useState<Date>();
     const [inputValue, setInputValue] = useState<string>('');
@@ -39,36 +41,48 @@ export const Dagvelger: React.FC<
         buttonRef?.current?.focus();
     };
 
+    const parseInputToDate = (input: string): Date | undefined => {
+        for (let i = 0; i < possibleInputFormat.length; i++) {
+            const format = possibleInputFormat[i];
+            const date = parse(input, format, new Date());
+
+            if (isValid(date)) {
+                return date;
+            }
+        }
+
+        return undefined;
+    };
+
     const handleInputChange: ChangeEventHandler<HTMLInputElement> = e => {
-        setInputValue(e.currentTarget.value);
-        const date = parse(e.currentTarget.value, datoformat, new Date());
-        if (isValid(date)) {
-            setSelected(date);
-            props.onDatoChange(date);
-        } else {
-            setSelected(undefined);
-            props.onDatoChange(undefined);
+        const value = e.currentTarget.value;
+        setInputValue(value);
+        if (value.length === 6 || value.length === 8 || value.length === 10) {
+            const date = parseInputToDate(value);
+
+            if (isValid(date)) {
+                setSelected(date);
+                props.onDatoChange(date);
+            } else {
+                setSelected(undefined);
+                props.onDatoChange(undefined);
+            }
         }
     };
 
-    const handleInputFocus = () => {
+    const handleClick = () => {
         setIsPopperOpen(true);
     };
 
-    const handleEnterKeyIfInFocus = (event: KeyboardEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        console.log('event: ', event);
+    const handleFormatOnBlur = (e: FocusEvent<HTMLInputElement>) => {
+        const value = e.currentTarget.value;
+        if (value.length === 6 || value.length === 8 || value.length === 10) {
+            const date = parseInputToDate(value);
 
-        if (event.code === 'Enter' && document.activeElement === event.currentTarget) {
-            setIsPopperOpen(true);
-        }
-    };
-
-    const handleMouseClickedIfInFocus = (event: MouseEvent<HTMLInputElement>) => {
-        event.preventDefault();
-
-        if (document.activeElement === event.currentTarget) {
-            setIsPopperOpen(true);
+            if (date && isValid(date)) {
+                const input = format(date, FORMAT, { locale: props.locale });
+                setInputValue(input);
+            }
         }
     };
 
@@ -85,15 +99,24 @@ export const Dagvelger: React.FC<
 
     return (
         <div className="navds-dagvelger">
-            <div ref={popperRef}>
-                <TextField
-                    {...props}
-                    onFocus={handleInputFocus}
-                    onKeyPress={handleEnterKeyIfInFocus}
-                    onClick={handleMouseClickedIfInFocus}
-                    value={inputValue}
-                    onChange={handleInputChange}
-                />
+            <div>
+                {!props.hideLabel && <Label>{props.label}</Label>}
+                <div
+                    ref={popperRef}
+                    className={`input-container ${props.hideLabel ? 'no-label' : ''}`}
+                >
+                    <TextField
+                        {...props}
+                        hideLabel
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        onBlur={handleFormatOnBlur}
+                        className="dato-felt"
+                    />
+                    <Button onClick={handleClick} size="small" variant="secondary">
+                        <Calender />
+                    </Button>
+                </div>
             </div>
             {isPopperOpen && (
                 <FocusTrap
