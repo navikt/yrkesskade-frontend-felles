@@ -76,7 +76,10 @@ export const Dagvelger: React.FC<
 
     const handleFormatOnBlur = (e: FocusEvent<HTMLInputElement>) => {
         const value = e.currentTarget.value;
-        if (value.length === 6 || value.length === 8 || value.length === 10) {
+        if (value.length === 0) {
+            setSelected(undefined);
+            props.onDatoChange(undefined);
+        } else if (value.length === 6 || value.length === 8 || value.length === 10) {
             const date = parseInputToDate(value);
 
             if (date && isValid(date)) {
