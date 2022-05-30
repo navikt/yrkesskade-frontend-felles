@@ -1,11 +1,16 @@
+import cors from 'cors';
 import express, { Express } from 'express';
 import headers from './headers';
+
 export interface IApp {
     app: Express;
 }
 
 export default async (): Promise<IApp> => {
     const app = express();
+
+    app.use(cors());
+    app.use(express.json());
 
     headers.setup(app);
 
@@ -19,3 +24,4 @@ export default async (): Promise<IApp> => {
     };
     return Promise.resolve(iapp);
 };
+
