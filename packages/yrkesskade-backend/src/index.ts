@@ -24,4 +24,3 @@ export default async (): Promise<IApp> => {
     };
     return Promise.resolve(iapp);
 };
-
