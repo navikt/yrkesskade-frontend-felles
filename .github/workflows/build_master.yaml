@@ -19,26 +19,25 @@ jobs:
       - name: Prepare repository
         run: git checkout "${GITHUB_REF:11}"
 
-      - name: Installer dependencies
-        run: |
-          yarn
-          yarn build
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
-
-     - name: "Login to GitHub Docker Registry"
-        uses: "docker/login-action@v1"
-        with:
-          "registry": "ghcr.io"
-          "username": "${{ github.actor }}"
-          "password": "${{ secrets.GITHUB_TOKEN }}"
-
       - name: Create a .npmrc file for the github package repository
         uses: FerLuisxd/create-npmrc@3
         with:
           org_name: navikt
         env:
           AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Installer dependencies
+        run: |
+          yarn
+          yarn build
+      
+      - name: Login
+        run: |
+          git config user.email "yrkesskade@nav.no"
+          git config user.name "Team Yrkesskade"
+          git remote set-url origin https://github-actions[bot]:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push
         run: |
