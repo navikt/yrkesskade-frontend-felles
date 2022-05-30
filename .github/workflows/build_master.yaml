@@ -19,18 +19,13 @@ jobs:
       - name: Prepare repository
         run: git checkout "${GITHUB_REF:11}"
 
-      - name: Create a .npmrc file for the github package repository
-        uses: FerLuisxd/create-npmrc@3
-        with:
-          org_name: navikt
-        env:
-          AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
       - name: Installer dependencies
         run: |
           yarn
           yarn build
-      
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Login
         run: |
           git config user.email "yrkesskade@nav.no"
@@ -38,6 +33,13 @@ jobs:
           git remote set-url origin https://github-actions[bot]:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create a .npmrc file for the github package repository
+        uses: FerLuisxd/create-npmrc@3
+        with:
+          org_name: navikt
+        env:
+          AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
       - name: Push
         run: |
