@@ -1,27 +1,8 @@
 import { Request } from 'express';
-import { logError, logDebug, logInfo, LOG_LEVEL, logWarn } from '@navikt/familie-logging';
-
-export const envVar = (navn: string, påkrevd = true, defaultValue?: string): string => {
-    const envVariable = process.env[navn];
-    if (!envVariable && påkrevd && !defaultValue) {
-        logError(`Mangler påkrevd miljøvariabel '${navn}'`);
-        process.exit(1);
-    }
-    if (!envVariable && defaultValue) {
-        return defaultValue;
-    } else {
-        return envVariable as string;
-    }
-};
-
-const prefix = (req: Request) => {
-    return `${
-        req.session && req.session.user ? `${req.session.user.displayName} -` : 'ugyldig sesjon -'
-    } ${req.method} - ${req.originalUrl}`;
-};
+import { logError, logDebug, logInfo, LOG_LEVEL, logWarn } from '@navikt/yrkesskade-logging';
 
 export const logRequest = (req: Request, message: string, level: LOG_LEVEL) => {
-    const melding = `${prefix(req)}: ${message}`;
+    const melding = `${req}: ${message}`;
     const callId = req.header('nav-call-id');
     // eslint-disable-next-line @typescript-eslint/camelcase
     const meta = callId ? { x_callId: callId } : {};
@@ -40,5 +21,18 @@ export const logRequest = (req: Request, message: string, level: LOG_LEVEL) => {
             break;
         default:
             logInfo(melding, meta);
+    }
+};
+
+export const envVar = (navn: string, påkrevd = true, defaultValue?: string): string => {
+    const envVariable = process.env[navn];
+    if (!envVariable && påkrevd && !defaultValue) {
+        logError(`Mangler påkrevd miljøvariabel '${navn}'`);
+        process.exit(1);
+    }
+    if (!envVariable && defaultValue) {
+        return defaultValue;
+    } else {
+        return envVariable as string;
     }
 };
