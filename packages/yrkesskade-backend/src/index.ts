@@ -10,7 +10,7 @@ export default async (): Promise<IApp> => {
     headers.setup(app);
 
     // health checks
-    app.get([`/internal/isAlive`, `/internal/isReady`], (req: any, res: any) =>
+    app.get([`/internal/isAlive`, `/internal/isReady`], (_req: any, res: any) =>
         res.sendStatus(200),
     );
 
