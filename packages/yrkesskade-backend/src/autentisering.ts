@@ -1,5 +1,7 @@
+import { logInfo } from '@navikt/yrkesskade-logging';
 import axios from 'axios';
 import { Request, Response } from 'express';
+import { envVar } from './utils';
 
 export const redirectTilLogin = async (req: Request, res: Response): Promise<void> => {
     const nodeEnv = process.env.NODE_ENV;
@@ -21,11 +23,11 @@ const redirectTilOauth = (req: Request, res: Response): Promise<void> => {
 };
 
 const redirectTilMock = async (req: Request, res: Response): Promise<void> => {
-    const response = await axios.get(
-        `${process.env.FAKEDINGS_URL_IDPORTEN}?pid=12345678910&acr=Level4`,
-    );
+    const fakedingsRequest = envVar('FAKEDINGS_TOKEN_REQUEST', true);
+
+    const response = await axios.get(fakedingsRequest);
     const token = await response.data;
-    console.log('token: ', token);
+    logInfo(`mock token utlevert av ${fakedingsRequest}: ${token}`);
 
     res.redirect(req.query.redirect as string);
 };

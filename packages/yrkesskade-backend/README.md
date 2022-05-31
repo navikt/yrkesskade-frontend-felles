@@ -19,5 +19,6 @@ yarn add @navikt/yrkesskade-backend
 Pakken krever noen miljøvariabler:
 
 ```sh
-LOG_LEVEL='info' | 'debug' - ikke påkrevd
+LOG_LEVEL='info' | 'debug' # - ikke påkrevd
+FAKEDINGS_TOKEN_REQUEST=https://fakedings.dev-gcp.nais.io/fake/... # idporten/aad el. - kun nødvendig for lokal kjøring
 ```
