@@ -15,11 +15,11 @@ const setup = (app: Express) => {
         res.header('X-Content-Type-Options', 'nosniff');
         res.header('Referrer-Policy', 'no-referrer');
 
-        if (process.env.NODE_ENV !== 'development') {
+      /*  if (process.env.NODE_ENV !== 'development') {
             res.header('Content-Security-Policy', cspString);
             res.header('X-WebKit-CSP', cspString);
             res.header('X-Content-Security-Policy', cspString);
-        }
+        }*/
 
         res.header('Feature-Policy', "geolocation 'none'; microphone 'none'; camera 'none'");
         res.header('Access-Control-Allow-Methods', 'PUT, PATCH, GET, POST, DELETE');
