@@ -1,12 +1,17 @@
 import cors from 'cors';
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
 import headers from './headers';
+import { configureAuthenticationAndVerification } from './routes/authenticate';
 
 export interface IApp {
     app: Express;
 }
 
-export default async (): Promise<IApp> => {
+export interface IAppOptions {
+    kreverAutentisering: boolean;
+}
+
+export default async (options: IAppOptions): Promise<IApp> => {
     const app = express();
 
     app.use(cors());
@@ -15,9 +20,13 @@ export default async (): Promise<IApp> => {
     headers.setup(app);
 
     // health checks
-    app.get([`/internal/isAlive`, `/internal/isReady`], (_req: any, res: any) =>
+    app.get([`/internal/isAlive`, `/internal/isReady`], (_req: Request, res: Response) =>
         res.sendStatus(200),
     );
+
+    if (options.kreverAutentisering) {
+        configureAuthenticationAndVerification(app);
+    }
 
     const iapp: IApp = {
         app: app,
