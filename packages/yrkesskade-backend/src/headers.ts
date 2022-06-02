@@ -15,7 +15,7 @@ const setup = (app: Express) => {
         res.header('X-Content-Type-Options', 'nosniff');
         res.header('Referrer-Policy', 'no-referrer');
 
-      /*  if (process.env.NODE_ENV !== 'development') {
+        /*  if (process.env.NODE_ENV !== 'development') {
             res.header('Content-Security-Policy', cspString);
             res.header('X-WebKit-CSP', cspString);
             res.header('X-Content-Security-Policy', cspString);
