@@ -1,4 +1,5 @@
 import cors from 'cors';
+import cookies from 'cookie-parser';
 import express, { Express, Request, Response } from 'express';
 import headers from './headers';
 import { configureAuthenticationAndVerification } from './routes/authenticate';
@@ -14,6 +15,7 @@ export interface IAppOptions {
 export default async (options: IAppOptions): Promise<IApp> => {
     const app = express();
 
+    app.use(cookies());
     app.use(cors());
     app.use(express.json());
 

@@ -2,6 +2,7 @@ import { logInfo } from '@navikt/yrkesskade-logging';
 import axios from 'axios';
 import { Request, Response } from 'express';
 import { envVar } from './utils';
+import config from './config';
 
 export const redirectTilLogin = async (req: Request, res: Response): Promise<void> => {
     const nodeEnv = process.env.NODE_ENV;
@@ -30,5 +31,6 @@ const redirectTilMock = async (req: Request, res: Response): Promise<void> => {
     logInfo(`mock token utlevert av ${fakedingsRequest}: ${token}`);
 
     res.header('Authorization', `Bearer  ${token}`);
+    res.cookie(config.COOKIE_NAME, token);
     res.redirect(req.query.redirect as string);
 };
