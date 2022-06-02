@@ -29,5 +29,6 @@ const redirectTilMock = async (req: Request, res: Response): Promise<void> => {
     const token = await response.data;
     logInfo(`mock token utlevert av ${fakedingsRequest}: ${token}`);
 
+    res.header('Authorization', `Bearer  ${token}`);
     res.redirect(req.query.redirect as string);
 };
