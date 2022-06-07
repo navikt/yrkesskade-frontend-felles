@@ -1,11 +1,13 @@
 import cors from 'cors';
 import cookies from 'cookie-parser';
-import express, { Express, Request, Response } from 'express';
+import express, { Express, Request, Response, Router } from 'express';
 import headers from './headers';
 import { configureAuthenticationAndVerification } from './routes/authenticate';
+import configureRouter from './router';
 
 export interface IApp {
     app: Express;
+    router: Router;
 }
 
 export interface IAppOptions {
@@ -14,7 +16,7 @@ export interface IAppOptions {
 
 export default async (options: IAppOptions): Promise<IApp> => {
     const app = express();
-
+    const router = configureRouter();
     app.use(cookies());
     app.use(cors());
     app.use(express.json());
@@ -32,6 +34,7 @@ export default async (options: IAppOptions): Promise<IApp> => {
 
     const iapp: IApp = {
         app: app,
+        router: router,
     };
     return Promise.resolve(iapp);
 };
