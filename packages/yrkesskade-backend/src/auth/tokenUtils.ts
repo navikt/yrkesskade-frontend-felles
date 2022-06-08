@@ -63,7 +63,7 @@ const loggOgReturnerOmTokenErGyldig = (req: Request, validAccessToken: boolean) 
 const isExpired = (token: string): boolean => {
     const claims = jose.decodeJwt(token);
     logInfo(`Sjekk om token er utgått:  ${claims.exp ? Date.now() < claims.exp * 1000 : true} - nå ${Date.now()} - exp: ${claims.exp ? claims.exp * 1000 : 'har ikke exp i claims'}`);
-    return claims.exp ? Date.now() < claims.exp * 1000 : true;
+    return claims.exp ? Date.now() >= claims.exp * 1000 : true;
 }
 
 export const opprettClient = (discoveryUrl: string, metadata: ClientMetadata): Promise<Client> => {
