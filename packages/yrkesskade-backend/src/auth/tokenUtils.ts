@@ -9,29 +9,21 @@ import { IApi } from '../typer';
 
 export const getOnBehalOfAccessToken = (client: Client, grantBody: GrantBody, req: Request, api: IApi): Promise<string> => {
     return new Promise((resolve, reject) => {
-        if (hasValidAccessToken(req)) {
-            const token = getTokenFromRequest(req);
-            if (token) {
-                resolve(token);
+        client.grant(grantBody).then((tokenSet: TokenSet) => {
+            if (tokenSet.access_token) {
+                resolve(tokenSet.access_token);
+            } else {
+                reject(`Token ikke tilgjengelig for ${api.clientId}`)
             }
-            throw new Error(`Token mangler i request`);
-        } else {
-            client.grant(grantBody).then((tokenSet: TokenSet) => {
-                if (tokenSet.access_token) {
-                    resolve(tokenSet.access_token);
-                } else {
-                    reject(`Token ikke tilgjengelig for ${api.clientId}`)
-                }
-            }).catch((error: Error) => {
-                const message = error.message;
-                if (message.includes('invalid_grant')) {
-                    logInfo(`Bruker har ikke tilgang til ${message}`);
-                } else {
-                    logError('Feil ved henting av OnBehalfOf token', error);
-                }
-            })
-        }
-    });
+        }).catch((error: Error) => {
+            const message = error.message;
+            if (message.includes('invalid_grant')) {
+                logInfo(`Bruker har ikke tilgang til ${message}`);
+            } else {
+                logError('Feil ved henting av OnBehalfOf token', error);
+            }
+        })
+    }
 };
 
 export const hasValidAccessToken = (req: Request) => {
@@ -74,13 +66,14 @@ export const opprettClient = (discoveryUrl: string, metadata: ClientMetadata): P
 }
 
 export const ensureAuthenticated = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    if (!hasValidAccessToken(req)) {
-      res.status(401).send('{"melding":"ugyldig token"}');
-    } else {
-      next();
-    }
-  };
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!hasValidAccessToken(req)) {
+    res.status(401).send('{"melding":"ugyldig token"}');
+  } else {
+    console.log("next");
+    next();
+  }
+};
