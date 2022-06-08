@@ -81,7 +81,6 @@ export const ensureAuthenticated = (req: Request, res: Response, next: NextFunct
     if (!hasValidAccessToken(req)) {
         res.status(401).send('{"melding":"ugyldig token"}');
     } else {
-        console.log('next');
         next();
     }
 };
