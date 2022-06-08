@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.36](https://github.com/navikt/yrkesskade-frontend-felles/compare/@navikt/yrkesskade-backend@0.0.35...@navikt/yrkesskade-backend@0.0.36) (2022-06-08)
+
+**Note:** Version bump only for package @navikt/yrkesskade-backend
+
+
+
+
+
 ## [0.0.35](https://github.com/navikt/yrkesskade-frontend-felles/compare/@navikt/yrkesskade-backend@0.0.34...@navikt/yrkesskade-backend@0.0.35) (2022-06-08)
 
 **Note:** Version bump only for package @navikt/yrkesskade-backend
