@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { logError, logInfo, LOG_LEVEL } from '@navikt/yrkesskade-logging';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import config from '../config';
 import { logRequest } from '../utils';
 import * as jose from 'jose';
@@ -62,6 +62,7 @@ const loggOgReturnerOmTokenErGyldig = (req: Request, validAccessToken: boolean) 
 
 const isExpired = (token: string): boolean => {
     const claims = jose.decodeJwt(token);
+    logInfo(`Sjekk om token er utgått:  ${claims.exp ? Date.now() < claims.exp * 1000 : true} - nå ${Date.now()} - exp: ${claims.exp ? claims.exp * 1000 : 'har ikke exp i claims'}`);
     return claims.exp ? Date.now() < claims.exp * 1000 : true;
 }
 
@@ -70,4 +71,10 @@ export const opprettClient = (discoveryUrl: string, metadata: ClientMetadata): P
         logInfo(`Discovered issuer ${issuer.issuer}`);
         return new issuer.Client(metadata);
     })
+}
+
+export const ensureAuthenticated = (req: Request, res: Response) => {
+  if (!hasValidAccessToken(req)) {
+    res.status(401).send('{"melding":"ugyldig token"}');
+  }
 }

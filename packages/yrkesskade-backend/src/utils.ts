@@ -1,8 +1,12 @@
 import { Request } from 'express';
 import { logError, logDebug, logInfo, LOG_LEVEL, logWarn } from '@navikt/yrkesskade-logging';
 
+const prefix = (req: Request) => {
+    return `${req.method} - ${req.originalUrl}`;
+};
+
 export const logRequest = (req: Request, message: string, level: LOG_LEVEL) => {
-    const melding = `${req}: ${message}`;
+    const melding = `${prefix(req)}: ${message}`;
     const callId = req.header('nav-call-id');
     // eslint-disable-next-line @typescript-eslint/camelcase
     const meta = callId ? { x_callId: callId } : {};
