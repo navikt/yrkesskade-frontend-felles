@@ -29,9 +29,8 @@ export const getOnBehalOfAccessToken = (
                 } else {
                     logError('Feil ved henting av OnBehalfOf token', error);
                 }
+                reject(JSON.stringify(message));
             });
-
-            reject('Kunne ikke opprette promise for å utføre token on-behalf-of');
     });
 };
 
