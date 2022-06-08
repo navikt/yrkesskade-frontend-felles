@@ -54,7 +54,7 @@ export const getTokenFromRequest = (req: Request): string | undefined => {
 const loggOgReturnerOmTokenErGyldig = (req: Request, validAccessToken: boolean) => {
     logRequest(
         req,
-        `Har ${validAccessToken ? 'gyldig' : 'ikke gyldig'}}`,
+        `Har ${validAccessToken ? 'gyldig token' : 'ikke gyldig token'}}`,
         LOG_LEVEL.INFO,
     );
     return validAccessToken;
