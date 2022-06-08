@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { logError, logInfo, LOG_LEVEL } from '@navikt/yrkesskade-logging';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import config from '../config';
 import { logRequest } from '../utils';
 import * as jose from 'jose';
@@ -73,8 +73,14 @@ export const opprettClient = (discoveryUrl: string, metadata: ClientMetadata): P
     })
 }
 
-export const ensureAuthenticated = (req: Request, res: Response) => {
-  if (!hasValidAccessToken(req)) {
-    res.status(401).send('{"melding":"ugyldig token"}');
-  }
-}
+export const ensureAuthenticated = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (!hasValidAccessToken(req)) {
+      res.status(401).send('{"melding":"ugyldig token"}');
+    } else {
+      next();
+    }
+  };
