@@ -2,9 +2,8 @@
 import { logError } from '@navikt/yrkesskade-logging';
 import axios from 'axios';
 import { Client, GrantExtras, TokenSet } from 'openid-client';
-import config from '../config';
 import { Request } from 'express';
-import { getTokenFromRequest } from './tokenUtils';
+import { getTokenFromRequest, hasValidAccessToken } from './tokenUtils';
 import { getMockTokenFromIdPorten } from './idportenToken';
 
 const getTokenXToken = async (
@@ -58,22 +57,27 @@ const getMockTokenXToken = async () => {
 export const exchangeToken = async (client: Client, request: Request) => {
     let token = getTokenFromRequest(request);
 
-    if (!token) {
-        if (process.env.ENV === 'local') {
-            token = await getMockTokenFromIdPorten();
-        } else {
-            // bruker er ikke autentisert
-            return;
-        }
-    }
-
-    // await verifiserAccessToken(token);
     const additionalClaims = {
         clientAssertionPayload: {
             nbf: Math.floor(Date.now() / 1000),
             aud: [client.issuer.metadata.token_endpoint],
         },
     };
+
+    if (!token) {
+        if (process.env.ENV === 'local') {
+            token = await getMockTokenFromIdPorten();
+            return await getTokenXToken(client, token, additionalClaims);
+        } else {
+            // bruker er ikke autentisert
+            return;
+        }
+    }
+
+    if (!hasValidAccessToken(request)) {
+        // token er ugyldig
+        return;
+    }
 
     return await getTokenXToken(client, token, additionalClaims);
 };
