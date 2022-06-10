@@ -14,7 +14,7 @@ const getTokenXToken = async (
 ) => {
     if (process.env.ENV === 'local') {
         // Dette skjer kun i lokalt miljø - siden tokenxClient kun blir initialisert i GCP env
-        return await getMockTokenXToken();
+        return await getMockTokenXToken(audience);
     }
 
     let tokenSet;
@@ -43,10 +43,9 @@ const getTokenXToken = async (
     return tokenSet;
 };
 
-const getMockTokenXToken = async () => {
-    // ?client_id=someclientid&aud=dev-gcp:targetteam:targetapp&acr=Level4&pid=12345678910
+const getMockTokenXToken = async (audience: string) => {
     const tokenXTokenResponse = await await axios.get(
-        `${process.env.FAKEDINGS_URL_TOKENX}?aud=${process.env.TOKENX_AUDIENCE}&acr=Level4&pid=12345678910&client_id=yrkesskade-saksbehandling`,
+        `${process.env.FAKEDINGS_URL_TOKENX}?aud=${audience}&acr=Level4&pid=12345678910&client_id=yrkesskade-mock`,
     );
 
     const tokenxToken = tokenXTokenResponse.data;
@@ -56,23 +55,18 @@ const getMockTokenXToken = async () => {
 };
 
 export const exchangeToken = async (client: Client, audience: string, request: Request) => {
-    let token = getTokenFromRequest(request);
+    const token = getTokenFromRequest(request);
 
     const additionalClaims = {
         clientAssertionPayload: {
             nbf: Math.floor(Date.now() / 1000),
-            aud: audience,
+            aud: [client.issuer.metadata.token_endpoint],
         },
     };
 
     if (!token) {
-        if (process.env.ENV === 'local') {
-            token = await getMockTokenFromIdPorten();
-            return await getTokenXToken(client, token, audience, additionalClaims);
-        } else {
-            // bruker er ikke autentisert
-            return;
-        }
+        logError('Kan ikke utføre en token exchange - token finnes ikke');
+        return;
     }
 
     if (!hasValidAccessToken(request)) {
