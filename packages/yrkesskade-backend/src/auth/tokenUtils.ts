@@ -4,7 +4,8 @@ import { NextFunction, Request, Response } from 'express';
 import config from '../config';
 import { logRequest } from '../utils';
 import * as jose from 'jose';
-import { Client, ClientMetadata, Issuer } from 'openid-client';
+import { Client, ClientMetadata, ClientOptions, Issuer } from 'openid-client';
+import clientRegistry from './clientRegistry';
 
 
 export const hasValidAccessToken = (req: Request) => {
@@ -38,10 +39,21 @@ const isExpired = (token: string): boolean => {
     return claims.exp ? Date.now() >= claims.exp * 1000 : true;
 };
 
-export const opprettClient = (discoveryUrl: string, metadata: ClientMetadata): Promise<Client> => {
+/**
+ * Oppretter en openid-client og legger klient inn i clientRegistry med key
+ * @param key - nøkkel i key-value listen av klienter
+ * @param discoveryUrl - url for openid configurasjon
+ * @param metadata - metadata for klient
+ * @param jwks - eventuelle JWKS nøkler
+ * @param options - eventuelle ekstra valg
+ * @returns client: Client
+ */
+export const opprettClient = (key: string, discoveryUrl: string, metadata: ClientMetadata, jwks?: { keys: jose.JWK[]; } | undefined, options?: ClientOptions | undefined): Promise<Client> => {
     return Issuer.discover(discoveryUrl).then((issuer: Issuer<Client>) => {
         logInfo(`Discovered issuer ${issuer.issuer}`);
-        return new issuer.Client(metadata);
+        const client = new issuer.Client(metadata, jwks, options);
+        clientRegistry.addClient(key, client);
+        return client;
     });
 };
 
