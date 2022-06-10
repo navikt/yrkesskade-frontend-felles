@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Client, GrantExtras, TokenSet } from 'openid-client';
 import { Request } from 'express';
 import { getTokenFromRequest, hasValidAccessToken } from './tokenUtils';
-import { getMockTokenFromIdPorten } from './idporten';
 
 const getTokenXToken = async (
     client: Client,

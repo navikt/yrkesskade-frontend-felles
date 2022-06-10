@@ -1,5 +1,5 @@
 import { logInfo } from '@navikt/yrkesskade-logging';
-import { BaseClient, custom } from 'openid-client';
+import { BaseClient } from 'openid-client';
 
 const clientRegistry: { [key: string]: BaseClient } = {};
 
