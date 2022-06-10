@@ -4,11 +4,12 @@ import axios from 'axios';
 import { Client, GrantExtras, TokenSet } from 'openid-client';
 import { Request } from 'express';
 import { getTokenFromRequest, hasValidAccessToken } from './tokenUtils';
-import { getMockTokenFromIdPorten } from './idportenToken';
+import { getMockTokenFromIdPorten } from './idporten';
 
 const getTokenXToken = async (
     client: Client,
     token: string | undefined,
+    audience: string,
     additionalClaims: GrantExtras,
 ) => {
     if (process.env.ENV === 'local') {
@@ -24,7 +25,7 @@ const getTokenXToken = async (
                 grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
                 client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
                 subject_token_type: 'urn:ietf:params:oauth:token-type:jwt',
-                audience: process.env.TOKENX_AUDIENCE,
+                audience: audience,
                 subject_token: token,
             },
             additionalClaims,
@@ -54,7 +55,7 @@ const getMockTokenXToken = async () => {
     });
 };
 
-export const exchangeToken = async (client: Client, request: Request) => {
+export const exchangeToken = async (client: Client, audience: string, request: Request) => {
     let token = getTokenFromRequest(request);
 
     const additionalClaims = {
@@ -67,7 +68,7 @@ export const exchangeToken = async (client: Client, request: Request) => {
     if (!token) {
         if (process.env.ENV === 'local') {
             token = await getMockTokenFromIdPorten();
-            return await getTokenXToken(client, token, additionalClaims);
+            return await getTokenXToken(client, token, audience, additionalClaims);
         } else {
             // bruker er ikke autentisert
             return;
@@ -79,5 +80,5 @@ export const exchangeToken = async (client: Client, request: Request) => {
         return;
     }
 
-    return await getTokenXToken(client, token, additionalClaims);
+    return await getTokenXToken(client, token, audience, additionalClaims);
 };
