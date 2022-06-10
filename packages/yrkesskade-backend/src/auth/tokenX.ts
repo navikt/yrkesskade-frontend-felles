@@ -61,7 +61,7 @@ export const exchangeToken = async (client: Client, audience: string, request: R
     const additionalClaims = {
         clientAssertionPayload: {
             nbf: Math.floor(Date.now() / 1000),
-            aud: [client.issuer.metadata.token_endpoint],
+            aud: audience,
         },
     };
 
