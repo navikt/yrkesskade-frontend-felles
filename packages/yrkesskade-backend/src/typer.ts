@@ -10,7 +10,6 @@ export interface IApi {
 
 export interface IService {
     scope?: string;
-    audience?: string;
     cluster: 'gcp' | 'fss';
     displayName: string;
     proxyPath: string;

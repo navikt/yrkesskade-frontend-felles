@@ -6,7 +6,7 @@ import { logRequest } from '../utils';
 import * as jose from 'jose';
 import { Client, ClientMetadata, ClientOptions, Issuer } from 'openid-client';
 import clientRegistry from './clientRegistry';
-
+import { IService } from '../typer';
 
 export const hasValidAccessToken = (req: Request) => {
     const token = getTokenFromRequest(req);
@@ -48,7 +48,13 @@ const isExpired = (token: string): boolean => {
  * @param options - eventuelle ekstra valg
  * @returns client: Client
  */
-export const opprettClient = (key: string, discoveryUrl: string, metadata: ClientMetadata, jwks?: { keys: jose.JWK[]; } | undefined, options?: ClientOptions | undefined): Promise<Client> => {
+export const opprettClient = (
+    key: string,
+    discoveryUrl: string,
+    metadata: ClientMetadata,
+    jwks?: { keys: jose.JWK[] } | undefined,
+    options?: ClientOptions | undefined,
+): Promise<Client> => {
     return Issuer.discover(discoveryUrl).then((issuer: Issuer<Client>) => {
         logInfo(`Discovered issuer ${issuer.issuer}`);
         const client = new issuer.Client(metadata, jwks, options);
@@ -59,8 +65,22 @@ export const opprettClient = (key: string, discoveryUrl: string, metadata: Clien
 
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     if (!hasValidAccessToken(req)) {
-        res.status(401).send('{"melding":"ugyldig token"}');
+        res.status(401).json({ melding: 'ugyldig token - token er utgått' });
     } else {
         next();
     }
+};
+
+export const utledAudience = (service: IService): string => {
+    const env = process.env.ENV === 'prod' ? 'prod' : 'dev';
+
+    return `${env}-${service.cluster}:yrkesskade:${service.id}`;
+};
+
+export const utledScope = (appId: string, cluster: 'gcp' | 'fss') => {
+    if (process.env.ENV === 'local' && process.env.OVERRIDE_SCOPE) {
+        return process.env.OVERRIDE_SCOPE;
+    }
+    const env = process.env.ENV === 'local' ? 'dev' : process.env.ENV;
+    return `api://${env}-${cluster}.yrkesskade.${appId}/.default`;
 };
