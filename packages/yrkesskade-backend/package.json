@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-backend",
-  "version": "0.0.45",
+  "version": "0.0.46",
   "description": "Skall for yrkesskade frontend",
   "author": "NAV",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
