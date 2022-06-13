@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Client, GrantExtras, TokenSet } from 'openid-client';
 import { Request } from 'express';
 import { getTokenFromRequest, hasValidAccessToken } from './tokenUtils';
+import { envVar } from '../utils';
 
 const getTokenXToken = async (
     client: Client,
@@ -43,8 +44,13 @@ const getTokenXToken = async (
 };
 
 const getMockTokenXToken = async (audience: string) => {
+    const tokenXUrl = envVar(
+        'FAKEDINGS_URL_TOKENX',
+        true,
+        'https://fakedings.dev-gcp.nais.io/fake/tokenx',
+    );
     const tokenXTokenResponse = await await axios.get(
-        `${process.env.FAKEDINGS_URL_TOKENX}?aud=${audience}&acr=Level4&pid=12345678910&client_id=yrkesskade-mock`,
+        `${tokenXUrl}?aud=${audience}&acr=Level4&pid=12345678910&client_id=yrkesskade-mock`,
     );
 
     const tokenxToken = tokenXTokenResponse.data;
