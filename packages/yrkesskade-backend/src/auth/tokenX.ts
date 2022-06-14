@@ -81,3 +81,5 @@ export const exchangeToken = async (client: Client, audience: string, request: R
 
     return await getTokenXToken(client, token, audience, additionalClaims);
 };
+
+export default { exchangeToken };

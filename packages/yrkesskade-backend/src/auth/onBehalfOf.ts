@@ -28,3 +28,5 @@ export const getOnBehalOfAccessToken = (
             });
     });
 };
+
+export default { getOnBehalOfAccessToken };

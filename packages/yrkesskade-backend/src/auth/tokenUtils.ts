@@ -84,3 +84,10 @@ export const utledScope = (appId: string, cluster: 'gcp' | 'fss') => {
     const env = process.env.ENV === 'local' ? 'dev' : process.env.ENV;
     return `api://${env}-${cluster}.yrkesskade.${appId}/.default`;
 };
+
+export default {
+    utledAudience,
+    utledScope,
+    ensureAuthenticated,
+    opprettClient
+}
