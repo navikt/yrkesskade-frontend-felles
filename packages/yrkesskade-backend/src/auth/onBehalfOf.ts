@@ -6,13 +6,13 @@ export const getOnBehalOfAccessToken = (
     client: Client,
     grantBody: GrantBody,
     api: IApi,
-): Promise<string> => {
+): Promise<TokenSet> => {
     return new Promise((resolve, reject) => {
         client
             .grant(grantBody)
             .then((tokenSet: TokenSet) => {
                 if (tokenSet.access_token) {
-                    resolve(tokenSet.access_token);
+                    resolve(tokenSet);
                 } else {
                     reject(`Token ikke tilgjengelig for ${api.clientId}`);
                 }
