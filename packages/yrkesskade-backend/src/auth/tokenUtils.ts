@@ -16,6 +16,19 @@ export const hasValidAccessToken = (req: Request) => {
     return loggOgReturnerOmTokenErGyldig(req, isExpired(token) === false);
 };
 
+export const getTokenSetsFromSession = (req: Request) => {
+    if (req && req.session && req.session && req.session.user) {
+        return req.session.user.tokenSets;
+    }
+
+    return undefined;
+};
+
+/**
+ * Henter token fra header. Dersom token ikke finnes i header, sjekkes cookies
+ * @param req 
+ * @returns 
+ */
 export const getTokenFromRequest = (req: Request): string | undefined => {
     let token = req.headers?.authorization?.split(' ')[1];
     if (!token) {
