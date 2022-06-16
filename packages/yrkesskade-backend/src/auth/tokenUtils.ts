@@ -8,12 +8,13 @@ import { Client, ClientMetadata, ClientOptions, Issuer, TokenSet } from 'openid-
 import clientRegistry from './clientRegistry';
 import { IService } from '../typer';
 
-export const hasValidAccessToken = (req: Request) => {
-    const token = getTokenFromRequest(req);
-    if (!token) {
-        return loggOgReturnerOmTokenErGyldig(req, false);
+export const hasValidAccessToken = (req: Request): boolean => {
+    const tokenSet = getTokenSetsFromSession(req);
+    if (!tokenSet) {
+        return false;
     }
-    return loggOgReturnerOmTokenErGyldig(req, isExpired(token) === false);
+    
+    return loggOgReturnerOmTokenErGyldig(req, new TokenSet(tokenSet).expired() === false);
 };
 
 export const getTokenSetsFromSession = (req: Request): TokenSet | undefined => {
