@@ -48,11 +48,6 @@ const loggOgReturnerOmTokenErGyldig = (req: Request, validAccessToken: boolean) 
     return validAccessToken;
 };
 
-const isExpired = (token: string): boolean => {
-    const claims = jose.decodeJwt(token);
-    return claims.exp ? Date.now() >= claims.exp * 1000 : true;
-};
-
 /**
  * Oppretter en openid-client og legger klient inn i clientRegistry med key
  * @param key - nøkkel i key-value listen av klienter
