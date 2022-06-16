@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import config from '../config';
 import { logRequest } from '../utils';
 import * as jose from 'jose';
-import { Client, ClientMetadata, ClientOptions, Issuer } from 'openid-client';
+import { Client, ClientMetadata, ClientOptions, Issuer, TokenSet } from 'openid-client';
 import clientRegistry from './clientRegistry';
 import { IService } from '../typer';
 
@@ -16,9 +16,9 @@ export const hasValidAccessToken = (req: Request) => {
     return loggOgReturnerOmTokenErGyldig(req, isExpired(token) === false);
 };
 
-export const getTokenSetsFromSession = (req: Request) => {
+export const getTokenSetsFromSession = (req: Request): TokenSet | undefined => {
     if (req && req.session && req.session && req.session.user) {
-        return req.session.user.tokenSets;
+        return req.session.user.tokenSets.self;
     }
 
     return undefined;
