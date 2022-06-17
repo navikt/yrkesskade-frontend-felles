@@ -10,12 +10,23 @@ import { IService } from '../typer';
 
 export const hasValidAccessToken = (req: Request): boolean => {
     const tokenSet = getTokenSetsFromSession(req);
+   
     if (!tokenSet) {
         return false;
     }
     
     return loggOgReturnerOmTokenErGyldig(req, new TokenSet(tokenSet).expired() === false);
 };
+
+export const hasValidToken = (req: Request): boolean => {
+    const token = getTokenFromRequest(req);
+
+    if (!token) {
+        return false;
+    }
+
+    return loggOgReturnerOmTokenErGyldig(req, new TokenSet({accessToken: token}).expired() === false);
+}
 
 export const getTokenSetsFromSession = (req: Request): TokenSet | undefined => {
     if (req && req.session && req.session && req.session.user) {
@@ -74,7 +85,12 @@ export const opprettClient = (
 
 export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     if (!hasValidAccessToken(req)) {
-        res.status(401).json({ melding: 'ugyldig token - token er utgått' });
+        // sjekk om vi har valid token i req og ikke session
+        if (!hasValidToken(req)) {
+            res.status(401).json({ melding: 'ugyldig token - token er utgått' });
+        } else {
+            next();
+        }
     } else {
         next();
     }
