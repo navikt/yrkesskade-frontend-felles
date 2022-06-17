@@ -7,6 +7,7 @@ import * as jose from 'jose';
 import { Client, ClientMetadata, ClientOptions, Issuer } from 'openid-client';
 import clientRegistry from './clientRegistry';
 import { IService } from '../typer';
+import { redirectTilLogin } from '../autentisering';
 
 export const hasValidAccessToken = (req: Request) => {
     const token = getTokenFromRequest(req);
@@ -63,13 +64,22 @@ export const opprettClient = (
     });
 };
 
-export const ensureAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+
+export const ensureAuthenticated = (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+    redirectUrl = '/'
+  ) => {
     if (!hasValidAccessToken(req)) {
-        res.status(401).json({ melding: 'ugyldig token - token er utgått' });
+      //res.status(401).json({ melding: 'ugyldig token - token er utgått' });
+      req.query.redirect = redirectUrl;
+      redirectTilLogin(req, res);
     } else {
-        next();
+      next();
     }
-};
+  };
+  
 
 export const utledAudience = (service: IService): string => {
     const env = process.env.ENV === 'prod' ? 'prod' : 'dev';
