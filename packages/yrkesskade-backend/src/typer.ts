@@ -23,4 +23,17 @@ export interface IAuthUser {
     tokenSets: {
         self: TokenSet;
     };
+    profile: IUserProfile | IInternalUserProfile 
+}
+
+export interface IUserProfile {
+    displayName: string;
+    identifier: string;
+}
+
+export interface IInternalUserProfile extends IUserProfile {
+    email: string;
+    enhet: string;
+    navIdent: string;
+    groups: string[];
 }
