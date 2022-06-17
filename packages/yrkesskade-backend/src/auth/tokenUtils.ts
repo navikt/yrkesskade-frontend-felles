@@ -68,12 +68,10 @@ export const opprettClient = (
 export const ensureAuthenticated = (
     req: Request,
     res: Response,
-    next: NextFunction,
-    redirectUrl = '/'
+    next: NextFunction
   ) => {
     if (!hasValidAccessToken(req)) {
-      //res.status(401).json({ melding: 'ugyldig token - token er utgått' });
-      req.query.redirect = redirectUrl;
+      req.query.redirect = '/';
       redirectTilLogin(req, res);
     } else {
       next();
