@@ -3,6 +3,7 @@ import { ISteps } from './types/step';
 
 type Props = {
     stepsDefinition: ISteps;
+    children: React.ReactNode;
 };
 
 interface StepsContextInterface {
@@ -15,7 +16,7 @@ export const StepsContext = createContext<StepsContextInterface>({
     setSteps: () => void 0,
 });
 
-export const StepsProvider: React.FC<Props> = ({ stepsDefinition, children }) => {
+export const StepsProvider: React.FC<Props> = ({ stepsDefinition, children }: Props) => {
     const [steps, setSteps] = useState<ISteps>(stepsDefinition);
     return <StepsContext.Provider value={{ steps, setSteps }}>{children}</StepsContext.Provider>;
 };
