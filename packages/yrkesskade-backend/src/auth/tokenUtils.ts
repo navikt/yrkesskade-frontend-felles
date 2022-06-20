@@ -71,8 +71,7 @@ export const ensureAuthenticated = (
     next: NextFunction
   ) => {
     if (!hasValidAccessToken(req)) {
-      req.query.redirect = '/';
-      redirectTilLogin(req, res);
+      res.status(401).json({melding: 'token_invalid'})
     } else {
       next();
     }
