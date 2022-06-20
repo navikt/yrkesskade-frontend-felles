@@ -7,7 +7,6 @@ import * as jose from 'jose';
 import { Client, ClientMetadata, ClientOptions, Issuer } from 'openid-client';
 import clientRegistry from './clientRegistry';
 import { IService } from '../typer';
-import { redirectTilLogin } from '../autentisering';
 
 export const hasValidAccessToken = (req: Request) => {
     const token = getTokenFromRequest(req);
