@@ -2,16 +2,19 @@
 import { logError } from '@navikt/yrkesskade-logging';
 import axios from 'axios';
 import { Client, GrantExtras, TokenSet } from 'openid-client';
-import { Request } from 'express';
-import { getTokenFromRequest, hasValidAccessToken } from './tokenUtils';
+import { NextFunction, Request, Response } from 'express';
+import { getTokenFromRequest, hasValidAccessToken, utledAudience } from './tokenUtils';
 import { envVar } from '../utils';
+import { IService } from '../typer';
+import clientRegistry from './clientRegistry';
+import { v4 as uuidv4 } from 'uuid';
 
 const getTokenXToken = async (
     client: Client,
     token: string | undefined,
     audience: string,
     additionalClaims: GrantExtras,
-) => {
+): Promise<TokenSet> => {
     if (process.env.ENV === 'local') {
         // Dette skjer kun i lokalt miljø - siden tokenxClient kun blir initialisert i GCP env
         return await getMockTokenXToken(audience);
@@ -38,6 +41,7 @@ const getTokenXToken = async (
       Body fra TokenX `,
             error,
         );
+        throw error;
     }
 
     return tokenSet;
@@ -71,15 +75,42 @@ export const exchangeToken = async (client: Client, audience: string, request: R
 
     if (!token) {
         logError('Kan ikke utføre en token exchange - token finnes ikke');
-        return;
+        throw new Error('Kan ikke utføre en token exchange - token finnes ikke');
     }
 
     if (!hasValidAccessToken(request)) {
         // token er ugyldig
-        return;
+        throw new Error('Token er ugyldig');
     }
 
     return await getTokenXToken(client, token, audience, additionalClaims);
 };
 
-export default { exchangeToken };
+export const attachTokenX = (
+    service: IService,
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const klient = clientRegistry.getClient('tokenX');
+    const audience = utledAudience(service);
+    exchangeToken(klient, audience, req)
+        .then((tokenSet: TokenSet) => {
+            // sett headere
+            req.headers['Nav-Call-Id'] = uuidv4();
+            const bearerToken = `Bearer ${tokenSet.access_token}`;
+            req.headers.Authorization = bearerToken;
+            req.headers.authorization = bearerToken;
+
+            return next();
+        })
+        .catch(e => {
+            logError(`Uventet feil - exchangeToken`, e);
+            res.status(500).json({
+                status: 'FEILET',
+                melding: 'Uventet feil. Vennligst prøv på nytt.',
+            });
+        });
+};
+
+export default { exchangeToken, attachTokenX };
