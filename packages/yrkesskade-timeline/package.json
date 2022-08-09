@@ -1,0 +1,35 @@
+{
+  "name": "@navikt/yrkesskade-timeline",
+  "version": "0.0.1",
+  "description": "Tidslinje komponent for yrkesskade",
+  "author": "NAV",
+  "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/navikt/yrkesskade-frontend-felles"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn run clean && yarn run compile",
+    "clean": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
+    "compile": "tsc -b tsconfig.json",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "dependencies": {
+    "snyk": "^1.942.0"
+  },
+  "snyk": true,
+  "devDependencies": {
+    "date-fns": "^2.29.1"
+  }
+}

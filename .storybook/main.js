@@ -1,4 +1,7 @@
 module.exports = {
+    core: {
+        builder: "webpack5",
+    },
     stories: ['../packages/**/*.stories.@(tsx|mdx)'],
     addons: ['@storybook/addon-essentials', '@storybook/addon-a11y', '@storybook/addon-storysource'],
     typescript: {
@@ -14,13 +17,7 @@ module.exports = {
             test: /\.(less)$/,
             use: [
                 { loader: require.resolve('style-loader') },
-                { loader: require.resolve('css-loader'),
-                    options: {
-                        modules: {
-                            compileType: 'icss',
-                        },
-                    }
-                },
+                { loader: require.resolve('css-loader') },
                 { loader: require.resolve('less-loader') },
             ],
         });
