@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { logInfo, logWarn } from '@navikt/yrkesskade-logging';
+import { logWarn } from '@navikt/yrkesskade-logging';
 import { logError } from '@navikt/yrkesskade-logging';
 import { NextFunction, Request, Response } from 'express';
 import { Client, TokenSet } from 'openid-client';
