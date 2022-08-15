@@ -13,7 +13,7 @@ export const getOnBehalOfAccessToken = async (
     scope: string,
     request: Request,
 ): Promise<TokenSet> => {
-    const token = await getTokenFromRequest(request);
+    const token = getTokenFromRequest(request);
     let tokenSet;
 
     try {
