@@ -1,11 +1,17 @@
 /* eslint-disable @typescript-eslint/camelcase */
+import { logInfo, logWarn } from '@navikt/yrkesskade-logging';
 import { logError } from '@navikt/yrkesskade-logging';
+import { NextFunction, Request, Response } from 'express';
 import { Client, TokenSet } from 'openid-client';
+import { IService } from '../typer';
+import clientRegistry from './clientRegistry';
+import { getTokenFromRequest, utledScope } from './tokenUtils';
 
 export const getOnBehalOfAccessToken = async (
     client: Client,
     token: string | undefined,
     scope: string,
+    request: Request,
 ): Promise<TokenSet> => {
     let tokenSet;
 
@@ -31,4 +37,40 @@ export const getOnBehalOfAccessToken = async (
     return tokenSet;
 };
 
-export default { getOnBehalOfAccessToken };
+export const attachAzureOBO = (
+    service: IService,
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
+    const client = clientRegistry.getClient('azureAD');
+    const token = getTokenFromRequest(req);
+    const scope = service.scope ? service.scope : utledScope(service.id, service.cluster);
+    getOnBehalOfAccessToken(client, token, scope, req)
+        .then((tokenSet: TokenSet) => {
+            req.headers['Nav-Call-Id'] = uuid();
+            const bearerToken = `Bearer ${tokenSet.access_token}`;
+            req.headers.Authorization = bearerToken;
+            req.headers.authorization = bearerToken;
+            logInfo(`request header: ${tokenSet.access_token} - scope: ${scope}`);
+            return next();
+        })
+        .catch(e => {
+            if (e.error === 'invalid_grant') {
+                logWarn(`invalid_grant`);
+                res.status(500).json({
+                    status: 'IKKE_TILGANG',
+                    frontendFeilmelding:
+                        'Uventet feil. Det er mulig at du ikke har tilgang til applikasjonen.',
+                });
+            } else {
+                logError(`Uventet feil - getOnBehalfOfAccessToken`, e);
+                res.status(500).json({
+                    status: 'FEILET',
+                    frontendFeilmelding: 'Uventet feil. Vennligst prøv på nytt.',
+                });
+            }
+        });
+};
+
+export default { getOnBehalOfAccessToken, attachAzureOBO };
