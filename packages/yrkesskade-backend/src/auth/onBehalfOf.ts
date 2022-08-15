@@ -52,7 +52,6 @@ export const attachAzureOBO = (
             const bearerToken = `Bearer ${tokenSet.access_token}`;
             req.headers.Authorization = bearerToken;
             req.headers.authorization = bearerToken;
-            logInfo(`request header: ${tokenSet.access_token} - scope: ${scope}`);
             return next();
         })
         .catch(e => {
