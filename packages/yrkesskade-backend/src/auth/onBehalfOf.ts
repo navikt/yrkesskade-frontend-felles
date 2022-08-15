@@ -1,32 +1,33 @@
-import { logInfo, logError } from '@navikt/yrkesskade-logging';
-import { Client, GrantBody, TokenSet } from 'openid-client';
-import { IApi } from '../typer';
+import { logError } from '@navikt/yrkesskade-logging';
+import { Client, TokenSet } from 'openid-client';
 
-export const getOnBehalOfAccessToken = (
+export const getOnBehalOfAccessToken = async (
     client: Client,
-    grantBody: GrantBody,
-    api: IApi,
-): Promise<string> => {
-    return new Promise((resolve, reject) => {
-        client
-            .grant(grantBody)
-            .then((tokenSet: TokenSet) => {
-                if (tokenSet.access_token) {
-                    resolve(tokenSet.access_token);
-                } else {
-                    reject(`Token ikke tilgjengelig for ${api.clientId}`);
-                }
-            })
-            .catch((error: Error) => {
-                const message = error.message;
-                if (message.includes('invalid_grant')) {
-                    logInfo(`Bruker har ikke tilgang til ${message}`);
-                } else {
-                    logError('Feil ved henting av OnBehalfOf token', error);
-                }
-                reject(JSON.stringify(message));
-            });
-    });
+    token: string | undefined,
+    scope: string,
+): Promise<TokenSet> => {
+    let tokenSet;
+
+    try {
+        tokenSet = await client.grant({
+            assertion: token,
+            client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
+            grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            requested_token_use: 'on_behalf_of',
+            scope: scope,
+        });
+    } catch (error: any) {
+        logError(
+            `Noe gitt kalt med token exchange mot TokenX.
+                Feilmelding fra openid-client: (${error}).
+                HTTP Status fra Azure AD: (${error.response.statusCode} ${error.response.statusMessage})
+                Body fra Azure AD `,
+            error,
+        );
+        throw error;
+    }
+
+    return tokenSet;
 };
 
 export default { getOnBehalOfAccessToken };
