@@ -10,10 +10,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const getOnBehalOfAccessToken = async (
     client: Client,
-    token: string | undefined,
     scope: string,
     request: Request,
 ): Promise<TokenSet> => {
+    const token = await getTokenFromRequest(request);
     let tokenSet;
 
     try {
@@ -45,9 +45,8 @@ export const attachAzureOBO = (
     next: NextFunction,
 ) => {
     const client = clientRegistry.getClient('azureAD');
-    const token = getTokenFromRequest(req);
     const scope = service.scope ? service.scope : utledScope(service.id, service.cluster);
-    getOnBehalOfAccessToken(client, token, scope, req)
+    getOnBehalOfAccessToken(client, scope, req)
         .then((tokenSet: TokenSet) => {
             req.headers['Nav-Call-Id'] = uuidv4();
             const bearerToken = `Bearer ${tokenSet.access_token}`;
