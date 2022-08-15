@@ -6,6 +6,7 @@ import { Client, TokenSet } from 'openid-client';
 import { IService } from '../typer';
 import clientRegistry from './clientRegistry';
 import { getTokenFromRequest, utledScope } from './tokenUtils';
+import { v4 as uuidv4 } from 'uuid';
 
 export const getOnBehalOfAccessToken = async (
     client: Client,
@@ -48,7 +49,7 @@ export const attachAzureOBO = (
     const scope = service.scope ? service.scope : utledScope(service.id, service.cluster);
     getOnBehalOfAccessToken(client, token, scope, req)
         .then((tokenSet: TokenSet) => {
-            req.headers['Nav-Call-Id'] = uuid();
+            req.headers['Nav-Call-Id'] = uuidv4();
             const bearerToken = `Bearer ${tokenSet.access_token}`;
             req.headers.Authorization = bearerToken;
             req.headers.authorization = bearerToken;
