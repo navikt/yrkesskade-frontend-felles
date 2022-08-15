@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { logError } from '@navikt/yrkesskade-logging';
 import { Client, TokenSet } from 'openid-client';
 
