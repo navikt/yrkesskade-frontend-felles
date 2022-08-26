@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-dokumentviser",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Dokumentviser yrkesskade",
   "author": "NAV",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
@@ -32,7 +32,6 @@
     "styled-components": "5.3.5"
   },
   "snyk": true,
-  "devDependencies": {},
   "resolutions": {
     "styled-components": "5.3.5"
   }
