@@ -1,0 +1,39 @@
+{
+  "name": "@navikt/yrkesskade-dokumentviser",
+  "version": "0.0.1",
+  "description": "Dokumentviser yrkesskade",
+  "author": "NAV",
+  "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/navikt/yrkesskade-frontend-felles"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn run clean && yarn run compile",
+    "clean": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
+    "compile": "tsc -b tsconfig.json",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "dependencies": {
+    "@navikt/ds-icons": "^1.2.2",
+    "@types/styled-components": "^5.1.26",
+    "snyk": "^1.942.0",
+    "styled-components": "5.3.5"
+  },
+  "snyk": true,
+  "devDependencies": {},
+  "resolutions": {
+    "styled-components": "5.3.5"
+  }
+}
