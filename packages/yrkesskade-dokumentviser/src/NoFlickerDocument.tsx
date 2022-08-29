@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { PDF } from './styled-components';
+
+export const PDF = styled.object`
+    width: 100%;
+    flex-grow: 1;
+`;
 
 interface Props {
     url: string;
@@ -77,7 +81,7 @@ export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Prop
                     <StyledPDF
                         key={v}
                         aria-hidden={!current}
-                        data={`${url}?version=${v}#toolbar=0&view=fitH&zoom=page-width`}
+                        data={url}
                         role="document"
                         type="application/pdf"
                         name={name}

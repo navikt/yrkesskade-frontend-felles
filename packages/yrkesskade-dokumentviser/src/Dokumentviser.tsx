@@ -10,6 +10,7 @@ import {
     StyledHeaderLink,
 } from './styled-components';
 import { ZoomIn, ZoomOut, ExternalLink } from '@navikt/ds-icons';
+import { b64ToBlobUrl } from './blobUtil';
 
 const MIN_PDF_WIDTH = 400;
 const ZOOM_STEP = 150;
@@ -26,6 +27,8 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
     const [pdfWidth, setPdfWidth] = useState<number>(getSavedPdfWidth);
     const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
     const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
+    const [transformedUrl, setTransformedUrl] = useState<string | undefined>();
+    const pdfViewerOptions = '#toolbar=0&view=fitH&zoom=page-width';
 
     useEffect(
         () => localStorage.setItem(PDF_WITH_LOCAL_STORAGE_KEY, pdfWidth.toString()),
@@ -34,6 +37,16 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
 
     const [version] = useState<number>(Date.now());
     const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        let tmpUrl = `${url}?${pdfViewerOptions}`;
+        if (url.includes(';base64')) {
+            const parts = url.split(',');
+            tmpUrl = b64ToBlobUrl(parts[1], 'application/pdf');
+            tmpUrl = `${tmpUrl}${pdfViewerOptions}`;
+        }
+        setTransformedUrl(tmpUrl);
+    }, [url]);
 
     return (
         <Container width={pdfWidth}>
@@ -58,12 +71,14 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
                     </StyledHeaderLink>
                 </HeaderSubContainer>
             </Header>
-            <NoFlickerReloadPdf
-                url={url}
-                version={version}
-                name={tittel}
-                onVersionLoaded={() => setIsLoading(false)}
-            />
+            {transformedUrl && (
+                <NoFlickerReloadPdf
+                    url={transformedUrl}
+                    version={version}
+                    name={tittel}
+                    onVersionLoaded={() => setIsLoading(false)}
+                />
+            )}
             {isLoading && <div>Laster</div>}
         </Container>
     );
