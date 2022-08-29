@@ -28,8 +28,7 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
     const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
     const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
     const [transformedUrl, setTransformedUrl] = useState<string | undefined>();
-    const pdfViewerOptions = '#toolbar=0&view=fitH&zoom=page-width';
-
+   
     useEffect(
         () => localStorage.setItem(PDF_WITH_LOCAL_STORAGE_KEY, pdfWidth.toString()),
         [pdfWidth],
@@ -39,11 +38,10 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        let tmpUrl = `${url}?${pdfViewerOptions}`;
+        let tmpUrl = `${url}`;
         if (url.includes(';base64')) {
             const parts = url.split(',');
             tmpUrl = b64ToBlobUrl(parts[1], 'application/pdf');
-            tmpUrl = `${tmpUrl}${pdfViewerOptions}`;
         }
         setTransformedUrl(tmpUrl);
     }, [url]);
@@ -62,7 +60,7 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
                 </HeaderSubContainer>
                 <HeaderSubContainer>
                     <StyledHeaderLink
-                        href={url}
+                        href={transformedUrl}
                         target="_blank"
                         title="Åpne i ny fane"
                         rel="noreferrer"

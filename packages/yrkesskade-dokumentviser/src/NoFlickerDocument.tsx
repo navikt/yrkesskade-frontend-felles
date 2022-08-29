@@ -17,6 +17,7 @@ export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Prop
     const [versionMap, setVersionMap] = useState<
         Map<string, { versions: number[]; readyIndex: number }>
     >(new Map([[url, { versions: [version], readyIndex: 0 }]]));
+    const pdfViewerOptions = '#toolbar=0&view=fitH&zoom=page-width';
 
     useEffect(() => {
         const data = versionMap.get(url);
@@ -70,7 +71,7 @@ export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Prop
     return (
         <StyledSwitcher>
             {data.versions.map((v, index) => {
-                const current = index === data.readyIndex;
+                const current: boolean = index === data.readyIndex;
                 const render = current || index > data.readyIndex;
 
                 if (!render) {
@@ -81,7 +82,7 @@ export const NoFlickerReloadPdf = ({ url, version, name, onVersionLoaded }: Prop
                     <StyledPDF
                         key={v}
                         aria-hidden={!current}
-                        data={url}
+                        data={`${url}${pdfViewerOptions}`}
                         role="document"
                         type="application/pdf"
                         name={name}
