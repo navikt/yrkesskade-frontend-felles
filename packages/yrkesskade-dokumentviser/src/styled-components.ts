@@ -54,6 +54,7 @@ export const StyledHeaderLink = styled.a`
     padding: 0;
     margin: 0;
     cursor: pointer;
+    color: #000000;
 `;
 
 export const PDF = styled.object`

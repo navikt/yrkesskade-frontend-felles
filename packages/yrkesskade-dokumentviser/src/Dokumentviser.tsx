@@ -9,7 +9,7 @@ import {
     StyledHeaderButton,
     StyledHeaderLink,
 } from './styled-components';
-import { ZoomIn, ZoomOut, ExternalLink } from '@navikt/ds-icons';
+import { ZoomIn, ZoomOut, ExternalLink, Close, Print } from '@navikt/ds-icons';
 import { b64ToBlobUrl } from './blobUtil';
 
 const MIN_PDF_WIDTH = 400;
@@ -21,14 +21,15 @@ const PDF_WITH_LOCAL_STORAGE_KEY = 'documentWidth';
 interface DokumentviserProps {
     url: string;
     tittel: string;
+    close: () => void;
 }
 
-export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
+export const Dokumentviser = ({ url, tittel, close }: DokumentviserProps) => {
     const [pdfWidth, setPdfWidth] = useState<number>(getSavedPdfWidth);
     const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
     const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
     const [transformedUrl, setTransformedUrl] = useState<string | undefined>();
-   
+
     useEffect(
         () => localStorage.setItem(PDF_WITH_LOCAL_STORAGE_KEY, pdfWidth.toString()),
         [pdfWidth],
@@ -46,6 +47,18 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
         setTransformedUrl(tmpUrl);
     }, [url]);
 
+    const print = () => {
+        if (!transformedUrl) {
+            console.error('Transformed url ikke satt');
+            return;
+        }
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = transformedUrl;
+        document.body.appendChild(iframe);
+        iframe.contentWindow?.print();
+    };
+
     return (
         <Container width={pdfWidth}>
             <Header>
@@ -59,6 +72,9 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
                     <StyledDocumentTitle>{tittel}</StyledDocumentTitle>
                 </HeaderSubContainer>
                 <HeaderSubContainer>
+                    <StyledHeaderButton onClick={print} title="Skriv ut">
+                        <Print />
+                    </StyledHeaderButton>
                     <StyledHeaderLink
                         href={transformedUrl}
                         target="_blank"
@@ -67,6 +83,9 @@ export const Dokumentviser = ({ url, tittel }: DokumentviserProps) => {
                     >
                         <ExternalLink />
                     </StyledHeaderLink>
+                    <StyledHeaderButton onClick={close} title="Lukk forhåndsvisning">
+                        <Close />
+                    </StyledHeaderButton>
                 </HeaderSubContainer>
             </Header>
             {transformedUrl && (

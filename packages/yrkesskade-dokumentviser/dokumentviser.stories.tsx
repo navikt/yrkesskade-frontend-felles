@@ -26,9 +26,13 @@ const URL = `data:application/pdf;base64,${base64}`;
 //const URL = 'https://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf';
 
 export const YrkesskadeDokumentviser: React.FC = () => {
+    const close = () => {
+        console.log('Lukk forhåndsvisning');
+    };
+
     return (
-        <div style={{ height: '100%', position: 'relative' }}>
-            <Dokumentviser url={URL} tittel="Dette er ett test dokument" />
+        <div style={{ height: '500px', position: 'relative' }}>
+            <Dokumentviser url={URL} tittel="Dette er ett test dokument" close={close} />
         </div>
     );
 };
