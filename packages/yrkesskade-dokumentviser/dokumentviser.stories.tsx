@@ -32,7 +32,12 @@ export const YrkesskadeDokumentviser: React.FC = () => {
 
     return (
         <div style={{ height: '500px', position: 'relative' }}>
-            <Dokumentviser url={URL} tittel="Dette er ett test dokument" close={close} />
+            <Dokumentviser
+                url={URL}
+                tittel="Dette er ett test dokument"
+                close={close}
+                data-test-id="test"
+            />
         </div>
     );
 };

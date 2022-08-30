@@ -18,13 +18,13 @@ const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
 const PDF_WITH_LOCAL_STORAGE_KEY = 'documentWidth';
 
-interface DokumentviserProps {
+interface DokumentviserProps extends React.HTMLAttributes<HTMLElement> {
     url: string;
     tittel: string;
     close: () => void;
 }
 
-export const Dokumentviser = ({ url, tittel, close }: DokumentviserProps) => {
+export const Dokumentviser = ({ url, tittel, close, ...props }: DokumentviserProps) => {
     const [pdfWidth, setPdfWidth] = useState<number>(getSavedPdfWidth);
     const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
     const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
@@ -60,7 +60,7 @@ export const Dokumentviser = ({ url, tittel, close }: DokumentviserProps) => {
     };
 
     return (
-        <Container width={pdfWidth}>
+        <Container width={pdfWidth} {...props}>
             <Header>
                 <HeaderSubContainer>
                     <StyledHeaderButton onClick={decrease} title="Zoom ut på PDF">
