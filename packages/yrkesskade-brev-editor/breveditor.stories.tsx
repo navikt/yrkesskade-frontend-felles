@@ -1,20 +1,40 @@
 import React from 'react';
 import { Breveditor } from './src';
 
+import { tannlegeerklæring } from './brev-tester/tannlegeerklæring';
+
+const meldingEnum = {
+    tannlegeerklæring: tannlegeerklæring,
+};
+
+const onBrevChanged = brev => {
+    console.log(brev);
+};
+
 export default {
     title: 'Komponenter/Breveditor',
     component: Breveditor,
+    decorators: [
+        Story => (
+            <div style={{ padding: '10px', height: '90vh', width: '90vw' }}>
+                <Story />
+            </div>
+        ),
+    ],
+    argTypes: {
+        mal: {
+            options: meldingEnum,
+            control: { type: 'select' },
+            defaultValue: tannlegeerklæring,
+        },
+    },
 };
 
-export const YrkesskadeBreveditor: React.FC = () => {
-    const outsideboxStyle = {
-        padding: '10px',
-        height: '90vh',
-        width: '90vw',
-    };
-    return (
-        <div style={outsideboxStyle}>
-            <Breveditor />
-        </div>
-    );
+const Template = ({ mal, onBrevChanged }) => {
+    return <Breveditor mal={mal} onBrevChanged={onBrevChanged} />;
+};
+
+export const YrkesskadeBreveditor = Template.bind({});
+YrkesskadeBreveditor.args = {
+    onBrevChanged: onBrevChanged,
 };

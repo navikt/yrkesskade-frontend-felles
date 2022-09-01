@@ -7,13 +7,17 @@ import {
     Transforms,
     Element as SlateElement,
     Editor,
+    Text,
 } from 'slate';
 import { withHistory } from 'slate-history';
 import isHotkey from 'is-hotkey';
 import { Button } from './components/Button';
-import { Icon } from './components/Icon';
+import { Ikon } from './components/Icon';
 import { Toolbar } from './components/Toolbar';
 import './Breveditor.less';
+
+import {Heading, BodyLong} from '@navikt/ds-react';
+
 
 type CustomElement = { type: 'paragraph'; align?: string; children: CustomText[] };
 type CustomText = { text: string; bold?: boolean; italic?: boolean };
@@ -26,32 +30,41 @@ declare module 'slate' {
     }
 }
 
-const HOTKEYS: { 'mod+b': string; 'mod+i': string; 'mod+u': string } = {
+interface Props {
+    mal: Descendant[] | [];
+    onBrevChanged: any;
+}
+
+const HOTKEYS: { 'mod+b': string; 'mod+i': string; 'mod+u': string ; 'mod+l': string; 'mod+c': string; 'mod+k': string} = {
     'mod+b': 'bold',
     'mod+i': 'italic',
     'mod+u': 'underline',
+    'mod+l': 'light',
+    'mod+c': 'change',
+    'mod+k': 'clear',
 };
 
 const LIST_TYPES = ['numbered-list', 'bulleted-list'];
 const TEXT_ALIGN_TYPES = ['left', 'right'];
 
-export const Breveditor = () => {
+export const Breveditor = ({ onBrevChanged, mal }: Props) => {
     const renderElement = useCallback(props => <Element {...props} />, []);
     const renderLeaf = useCallback(props => <Leaf {...props} />, []);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
     return (
         <div className="breveditor">
-            <Slate editor={editor} value={initialValue}>
+            <Slate editor={editor} value={mal} onChange={onBrevChanged}>
                 <Toolbar>
                     <div>
                         <MarkButton format="bold" icon="format_bold" />
                         <MarkButton format="italic" icon="format_italic" />
                         <MarkButton format="underline" icon="format_underlined" />
                         <BlockButton format="block-quote" icon="format_quote" />
+                        <BlockButton format="light" icon="format_quote" />
+                        <MarkButton format="clear" icon="format_clear" />
                     </div>
                     <div>
-                        <BlockButton format="normal" icon="normal" />
                         <BlockButton format="heading-one" icon="looks_one" />
                         <BlockButton format="heading-two" icon="looks_two" />
                     </div>
@@ -65,7 +78,7 @@ export const Breveditor = () => {
                 <Editable
                     renderElement={renderElement}
                     renderLeaf={renderLeaf}
-                    placeholder="Enter some rich text…"
+                    placeholder="Skriv et brev"
                     spellCheck
                     // autoFocus
                     onKeyDown={event => {
@@ -119,8 +132,20 @@ const toggleBlock = (editor, format) => {
 
 const toggleMark = (editor, format) => {
     const isActive = isMarkActive(editor, format);
+    if(format === 'clear') {
+        
+        // remove all styles
+        Transforms.setNodes(editor, { bold: false, italic: false, underline: false, change: false, light: false }, { match: Text.isText });
 
-    if (isActive) {
+        // make it a paragrah
+        Transforms.setNodes(
+            editor,
+            { type: 'paragraph', textAlign: 'left' },
+            // { match: (n) => isOfElementTypes(n, [ContentTypeEnum.INDENT, ...Object.values(HeadingTypesEnum)]) }
+          );
+
+    }
+    else if (isActive) {
         Editor.removeMark(editor, format);
     } else {
         Editor.addMark(editor, format, true);
@@ -163,15 +188,15 @@ const Element = ({ attributes, children, element }) => {
             );
         case 'heading-one':
             return (
-                <h1 style={style} {...attributes}>
+                <Heading level="1" size="xlarge" style={style} {...attributes}>
                     {children}
-                </h1>
+                </Heading>
             );
         case 'heading-two':
             return (
-                <h2 style={style} {...attributes}>
+                <Heading level="2" size="large" style={style} {...attributes}>
                     {children}
-                </h2>
+                </Heading>
             );
         case 'list-item':
             return (
@@ -187,9 +212,9 @@ const Element = ({ attributes, children, element }) => {
             );
         default:
             return (
-                <p style={style} {...attributes}>
+                <BodyLong style={style} {...attributes}>
                     {children}
-                </p>
+                </BodyLong>
             );
     }
 };
@@ -206,11 +231,22 @@ const Leaf = ({ attributes, children, leaf }) => {
     if (leaf.underline) {
         children = <u>{children}</u>;
     }
+    if (leaf.change) {
+        children = <span className="red">{children}</span>;
+    }
+    if (leaf.light) {
+        children = <span className="light">{children}</span>;
+    }
+    if(leaf.clear) {
+        <BodyLong style={style} {...attributes}>
+                    {children}
+                </BodyLong>
+    }
 
     return <span {...attributes}>{children}</span>;
 };
 
-const BlockButton = ({ format, icon }) => {
+const BlockButton = ({ format, icon }: { format: string; icon: string }) => {
     const editor = useSlate();
     return (
         <Button
@@ -224,7 +260,7 @@ const BlockButton = ({ format, icon }) => {
                 toggleBlock(editor, format);
             }}
         >
-            <Icon>{icon}</Icon>
+            <Ikon>{icon}</Ikon>
         </Button>
     );
 };
@@ -239,38 +275,7 @@ const MarkButton = ({ format, icon }: { format: string; icon: string }) => {
                 toggleMark(editor, format);
             }}
         >
-            <Icon>{icon}</Icon>
+            <Ikon>{icon}</Ikon>
         </Button>
     );
 };
-
-const initialValue: Descendant[] = [
-    {
-        type: 'paragraph',
-        children: [
-            { text: 'This is editable ' },
-            { text: 'rich', bold: true },
-            { text: ' text, ' },
-            { text: 'much', italic: true },
-            { text: ' better than a ' },
-            { text: '!' },
-        ],
-    },
-    {
-        type: 'paragraph',
-        children: [
-            {
-                text: "Since it's rich text, you can do things like turn a selection of text ",
-            },
-            { text: 'bold', bold: true },
-            {
-                text: ', or add a semantically rendered block quote in the middle of the page, like this:',
-            },
-        ],
-    },
-    {
-        type: 'paragraph',
-        align: 'center',
-        children: [{ text: 'Try it out for yourself!' }],
-    },
-];
