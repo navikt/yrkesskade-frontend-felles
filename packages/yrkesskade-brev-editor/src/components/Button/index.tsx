@@ -5,7 +5,6 @@ interface BaseProps {
     className: string;
     [key: string]: unknown;
 }
-// type OrNull<T> = T | null;
 
 export const Button = React.forwardRef(
     ({
@@ -19,7 +18,6 @@ export const Button = React.forwardRef(
             reversed: boolean;
         } & BaseProps
     >) => (
-        // ref: Ref<OrNull<HTMLSpanElement>>,
         <span
             {...props}
             // ref={ref}

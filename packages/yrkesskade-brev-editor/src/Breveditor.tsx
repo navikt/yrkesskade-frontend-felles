@@ -1,3 +1,4 @@
+
 import React, { useCallback, useMemo } from 'react';
 import { ReactEditor, Slate, withReact, Editable, useSlate } from 'slate-react';
 import {
@@ -9,7 +10,7 @@ import {
     Editor,
     Text,
 } from 'slate';
-import { withHistory } from 'slate-history';
+import { withHistory, HistoryEditor } from 'slate-history';
 import isHotkey from 'is-hotkey';
 import { Button } from './components/Button';
 import { Ikon } from './components/Icon';
@@ -20,12 +21,13 @@ import {Heading, BodyLong} from '@navikt/ds-react';
 
 
 type CustomElement = { type: 'paragraph'; align?: string; children: CustomText[] };
-type CustomText = { text: string; bold?: boolean; italic?: boolean };
+type CustomHeading = { type: 'heading'; align?: string; children: CustomText[] };
+type CustomText = { text: string; bold?: boolean; italic?: boolean, underline?: boolean, light?: boolean, change?: boolean };
 
 declare module 'slate' {
     interface CustomTypes {
-        Editor: BaseEditor & ReactEditor;
-        Element: CustomElement;
+        Editor: BaseEditor & ReactEditor & HistoryEditor;
+        Element: CustomElement | CustomHeading;
         Text: CustomText;
     }
 }
@@ -48,8 +50,8 @@ const LIST_TYPES = ['numbered-list', 'bulleted-list'];
 const TEXT_ALIGN_TYPES = ['left', 'right'];
 
 export const Breveditor = ({ onBrevChanged, mal }: Props) => {
-    const renderElement = useCallback(props => <Element {...props} />, []);
-    const renderLeaf = useCallback(props => <Leaf {...props} />, []);
+    const renderElement = useCallback((props: JSX.IntrinsicAttributes & { attributes: any; children: any; element: any; }) => <Element {...props} />, []);
+    const renderLeaf = useCallback((props: JSX.IntrinsicAttributes & { attributes: any; children: any; leaf: any; }) => <Leaf {...props} />, []);
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
     return (
@@ -61,7 +63,7 @@ export const Breveditor = ({ onBrevChanged, mal }: Props) => {
                         <MarkButton format="italic" icon="format_italic" />
                         <MarkButton format="underline" icon="format_underlined" />
                         <BlockButton format="block-quote" icon="format_quote" />
-                        <BlockButton format="light" icon="format_quote" />
+                        <MarkButton format="light" icon="format_color_reset" />
                         <MarkButton format="clear" icon="format_clear" />
                     </div>
                     <div>
@@ -96,7 +98,7 @@ export const Breveditor = ({ onBrevChanged, mal }: Props) => {
     );
 };
 
-const toggleBlock = (editor, format) => {
+const toggleBlock = (editor: Editor, format: string) => {
     const isActive = isBlockActive(
         editor,
         format,
@@ -130,18 +132,15 @@ const toggleBlock = (editor, format) => {
     }
 };
 
-const toggleMark = (editor, format) => {
+const toggleMark = (editor: Editor, format: string) => {
     const isActive = isMarkActive(editor, format);
     if(format === 'clear') {
-        
         // remove all styles
         Transforms.setNodes(editor, { bold: false, italic: false, underline: false, change: false, light: false }, { match: Text.isText });
-
         // make it a paragrah
         Transforms.setNodes(
             editor,
-            { type: 'paragraph', textAlign: 'left' },
-            // { match: (n) => isOfElementTypes(n, [ContentTypeEnum.INDENT, ...Object.values(HeadingTypesEnum)]) }
+            { type: 'paragraph', align: 'left' },
           );
 
     }
@@ -152,7 +151,7 @@ const toggleMark = (editor, format) => {
     }
 };
 
-const isBlockActive = (editor, format, blockType = 'type') => {
+const isBlockActive = (editor: Editor, format: string, blockType = 'type') => {
     const { selection } = editor;
     if (!selection) return false;
 
@@ -166,7 +165,7 @@ const isBlockActive = (editor, format, blockType = 'type') => {
     return !!match;
 };
 
-const isMarkActive = (editor, format) => {
+const isMarkActive = (editor: Editor, format: string) => {
     const marks = Editor.marks(editor);
     return marks ? marks[format] === true : false;
 };
@@ -220,6 +219,9 @@ const Element = ({ attributes, children, element }) => {
 };
 
 const Leaf = ({ attributes, children, leaf }) => {
+    console.log('attributes', attributes);
+    console.log('children', children);
+    console.log('leaf', leaf);
     if (leaf.bold) {
         children = <strong>{children}</strong>;
     }
@@ -238,7 +240,7 @@ const Leaf = ({ attributes, children, leaf }) => {
         children = <span className="light">{children}</span>;
     }
     if(leaf.clear) {
-        <BodyLong style={style} {...attributes}>
+        <BodyLong {...attributes}>
                     {children}
                 </BodyLong>
     }
@@ -255,12 +257,12 @@ const BlockButton = ({ format, icon }: { format: string; icon: string }) => {
                 format,
                 TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type',
             )}
-            onMouseDown={event => {
+            onMouseDown={(event: { preventDefault: () => void; }) => {
                 event.preventDefault();
                 toggleBlock(editor, format);
             }}
         >
-            <Ikon>{icon}</Ikon>
+            <Ikon className={icon} />
         </Button>
     );
 };
@@ -270,12 +272,12 @@ const MarkButton = ({ format, icon }: { format: string; icon: string }) => {
     return (
         <Button
             active={isMarkActive(editor, format)}
-            onMouseDown={event => {
+            onMouseDown={(event: { preventDefault: () => void; }) => {
                 event.preventDefault();
                 toggleMark(editor, format);
             }}
         >
-            <Ikon>{icon}</Ikon>
+            <Ikon className={icon} />
         </Button>
     );
 };

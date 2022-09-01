@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import {
     FormatBold,
     FormatItalic,
@@ -11,19 +11,16 @@ import {
     FormatAlignLeft,
     FormatAlignRight,
     FormatClear,
+    FormatColorReset,
 } from '@mui/icons-material';
-
-// format_align_left
-// format_align_right
-
 interface BaseProps {
     className: string;
     [key: string]: unknown;
 }
 
-export const Ikon = (className, ...props): BaseProps => {
+export const Ikon = ({ className }: PropsWithChildren<BaseProps>) => {
     let dynamicIcon;
-    switch (className.children) {
+    switch (className) {
         case 'format_bold':
             dynamicIcon = <FormatBold />;
             break;
@@ -56,6 +53,9 @@ export const Ikon = (className, ...props): BaseProps => {
             break;
         case 'format_align_right':
             dynamicIcon = <FormatAlignRight />;
+            break;
+        case 'format_color_reset':
+            dynamicIcon = <FormatColorReset />;
             break;
         default:
             dynamicIcon = <LooksOne />;
