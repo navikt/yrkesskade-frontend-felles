@@ -26,7 +26,7 @@ export const getOnBehalOfAccessToken = async (
         });
     } catch (error: any) {
         logError(
-            `Noe gitt kalt med token exchange mot TokenX.
+            `Noe gitt kalt med generering av On-behalf-of token.
                 Feilmelding fra openid-client: (${error}).
                 HTTP Status fra Azure AD: (${error.response.statusCode} ${error.response.statusMessage})
                 Body fra Azure AD `,
