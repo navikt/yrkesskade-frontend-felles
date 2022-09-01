@@ -1,7 +1,7 @@
 {
-  "name": "@navikt/yrkesskade-backend",
-  "version": "0.1.11",
-  "description": "Skall for yrkesskade frontend",
+  "name": "@navikt/yrkesskade-dokumentviser",
+  "version": "0.0.7",
+  "description": "Dokumentviser yrkesskade",
   "author": "NAV",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
   "repository": {
@@ -26,25 +26,13 @@
     "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
-    "@navikt/yrkesskade-logging": "^0.0.5",
-    "@types/cookie-parser": "^1.4.3",
-    "@types/cors": "^2.8.12",
-    "@types/express": "^4.17.13",
-    "@types/uuid": "^8.3.4",
-    "axios": "^0.27.2",
-    "body-parser": "^1.20.0",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "express": "^4.18.1",
-    "express-http-proxy": "^1.6.3",
-    "jose": "^4.8.1",
-    "js-cookie": "^3.0.1",
-    "openid-client": "^5.1.6",
+    "@navikt/ds-icons": "^1.2.2",
+    "@types/styled-components": "^5.1.26",
     "snyk": "^1.942.0",
-    "uuid4": "^2.0.2"
+    "styled-components": "5.3.5"
   },
+  "snyk": true,
   "resolutions": {
-    "cache-manager": "2.10.0"
-  },
-  "snyk": true
+    "styled-components": "5.3.5"
+  }
 }
