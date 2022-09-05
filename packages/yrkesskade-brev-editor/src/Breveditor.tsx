@@ -1,6 +1,5 @@
-
 import React, { useCallback, useMemo } from 'react';
-import { ReactEditor, Slate, withReact, Editable, useSlate } from 'slate-react';
+import { ReactEditor, Slate, withReact, Editable, useSlate, RenderLeafProps, RenderElementProps } from 'slate-react';
 import {
     BaseEditor,
     Descendant,
@@ -17,27 +16,36 @@ import { Ikon } from './components/Icon';
 import { Toolbar } from './components/Toolbar';
 import './Breveditor.less';
 
-import {Heading, BodyLong} from '@navikt/ds-react';
-
+import { Heading, BodyLong } from '@navikt/ds-react';
 
 type CustomElement = { type: 'paragraph'; align?: string; children: CustomText[] };
 type CustomHeading = { type: 'heading'; align?: string; children: CustomText[] };
-type CustomText = { text: string; bold?: boolean; italic?: boolean, underline?: boolean, light?: boolean, change?: boolean };
+type CustomQuote = { type: 'block-quote'; align?: string; children: CustomText[] };
+type CustomText = {
+    key: string;
+    text: string;
+    bold?: boolean;
+    italic?: boolean;
+    underline?: boolean;
+    light?: boolean;
+    change?: boolean;
+    clear?: boolean
+};
 
 declare module 'slate' {
     interface CustomTypes {
         Editor: BaseEditor & ReactEditor & HistoryEditor;
-        Element: CustomElement | CustomHeading;
+        Element: CustomElement | CustomHeading | CustomQuote;
         Text: CustomText;
     }
 }
 
 interface Props {
-    mal: Descendant[] | [];
+    mal: Descendant[] | [];
     onBrevChanged: any;
 }
 
-const HOTKEYS: { 'mod+b': string; 'mod+i': string; 'mod+u': string ; 'mod+l': string; 'mod+c': string; 'mod+k': string} = {
+const HOTKEYS: { [key: string]: string } = {
     'mod+b': 'bold',
     'mod+i': 'italic',
     'mod+u': 'underline',
@@ -50,8 +58,18 @@ const LIST_TYPES = ['numbered-list', 'bulleted-list'];
 const TEXT_ALIGN_TYPES = ['left', 'right'];
 
 export const Breveditor = ({ onBrevChanged, mal }: Props) => {
-    const renderElement = useCallback((props: JSX.IntrinsicAttributes & { attributes: any; children: any; element: any; }) => <Element {...props} />, []);
-    const renderLeaf = useCallback((props: JSX.IntrinsicAttributes & { attributes: any; children: any; leaf: any; }) => <Leaf {...props} />, []);
+    const renderElement = useCallback(
+        (props: JSX.IntrinsicAttributes & RenderElementProps) => (
+            <Element {...props} />
+        ),
+        [],
+    );
+    const renderLeaf = useCallback(
+        (props: JSX.IntrinsicAttributes & RenderLeafProps) => (
+            <Leaf {...props} />
+        ),
+        [],
+    );
     const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
     return (
@@ -127,31 +145,30 @@ const toggleBlock = (editor: Editor, format: string) => {
     Transforms.setNodes<SlateElement>(editor, newProperties);
 
     if (!isActive && isList) {
-        const block = { type: format, children: [] };
+        const block: any = { type: format, children: [] };
         Transforms.wrapNodes(editor, block);
     }
 };
 
 const toggleMark = (editor: Editor, format: string) => {
     const isActive = isMarkActive(editor, format);
-    if(format === 'clear') {
+    if (format === 'clear') {
         // remove all styles
-        Transforms.setNodes(editor, { bold: false, italic: false, underline: false, change: false, light: false }, { match: Text.isText });
-        // make it a paragrah
         Transforms.setNodes(
             editor,
-            { type: 'paragraph', align: 'left' },
-          );
-
-    }
-    else if (isActive) {
+            { bold: false, italic: false, underline: false, change: false, light: false },
+            { match: Text.isText },
+        );
+        // make it a paragrah
+        Transforms.setNodes(editor, { type: 'paragraph', align: 'left' });
+    } else if (isActive) {
         Editor.removeMark(editor, format);
     } else {
         Editor.addMark(editor, format, true);
     }
 };
 
-const isBlockActive = (editor: Editor, format: string, blockType = 'type') => {
+const isBlockActive = (editor: Editor, format: string, blockType: string = 'type') => {
     const { selection } = editor;
     if (!selection) return false;
 
@@ -166,11 +183,11 @@ const isBlockActive = (editor: Editor, format: string, blockType = 'type') => {
 };
 
 const isMarkActive = (editor: Editor, format: string) => {
-    const marks = Editor.marks(editor);
+    const marks: any = Editor.marks(editor);
     return marks ? marks[format] === true : false;
 };
 
-const Element = ({ attributes, children, element }) => {
+const Element = ({ attributes, children, element }: any) => {
     const style = { textAlign: element.align };
     switch (element.type) {
         case 'block-quote':
@@ -218,10 +235,7 @@ const Element = ({ attributes, children, element }) => {
     }
 };
 
-const Leaf = ({ attributes, children, leaf }) => {
-    console.log('attributes', attributes);
-    console.log('children', children);
-    console.log('leaf', leaf);
+const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     if (leaf.bold) {
         children = <strong>{children}</strong>;
     }
@@ -239,10 +253,8 @@ const Leaf = ({ attributes, children, leaf }) => {
     if (leaf.light) {
         children = <span className="light">{children}</span>;
     }
-    if(leaf.clear) {
-        <BodyLong {...attributes}>
-                    {children}
-                </BodyLong>
+    if (leaf.clear) {
+        <BodyLong {...attributes}>{children}</BodyLong>;
     }
 
     return <span {...attributes}>{children}</span>;
@@ -257,7 +269,7 @@ const BlockButton = ({ format, icon }: { format: string; icon: string }) => {
                 format,
                 TEXT_ALIGN_TYPES.includes(format) ? 'align' : 'type',
             )}
-            onMouseDown={(event: { preventDefault: () => void; }) => {
+            onMouseDown={(event: { preventDefault: () => void }) => {
                 event.preventDefault();
                 toggleBlock(editor, format);
             }}
@@ -272,7 +284,7 @@ const MarkButton = ({ format, icon }: { format: string; icon: string }) => {
     return (
         <Button
             active={isMarkActive(editor, format)}
-            onMouseDown={(event: { preventDefault: () => void; }) => {
+            onMouseDown={(event: { preventDefault: () => void }) => {
                 event.preventDefault();
                 toggleMark(editor, format);
             }}
