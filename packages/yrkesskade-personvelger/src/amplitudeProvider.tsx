@@ -7,6 +7,7 @@ type Context = {
 
 interface Props {
     amplitudeClient?: AmplitudeClient;
+    children: React.ReactNode;
 }
 
 export const AmplitudeLoggerContext = createContext<Context>({} as Context);
