@@ -21,6 +21,7 @@ import { Heading, BodyLong } from '@navikt/ds-react';
 type CustomElement = { type: 'paragraph'; align?: string; children: CustomText[] };
 type CustomHeading = { type: 'heading'; align?: string; children: CustomText[] };
 type CustomQuote = { type: 'block-quote'; align?: string; children: CustomText[] };
+type CustomList = { type: 'list-item'; align?: string; children: CustomText[]};
 type CustomText = {
     key: string;
     text: string;
@@ -32,10 +33,12 @@ type CustomText = {
     clear?: boolean
 };
 
+type ElementTypes = 'paragraph' | 'heading' | 'block-quote' | 'list-item' | undefined;
+
 declare module 'slate' {
     interface CustomTypes {
         Editor: BaseEditor & ReactEditor & HistoryEditor;
-        Element: CustomElement | CustomHeading | CustomQuote;
+        Element: CustomElement | CustomHeading | CustomQuote | CustomList;
         Text: CustomText;
     }
 }
@@ -138,8 +141,9 @@ const toggleBlock = (editor: Editor, format: string) => {
             align: isActive ? undefined : format,
         };
     } else {
+        const type = isActive ? 'paragraph' : isList ? 'list-item' : format;
         newProperties = {
-            type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+            type: type as ElementTypes//'paragraph' | 'block-quote' | 'heading' | undefined
         };
     }
     Transforms.setNodes<SlateElement>(editor, newProperties);
