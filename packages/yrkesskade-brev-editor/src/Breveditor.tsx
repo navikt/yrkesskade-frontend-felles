@@ -18,10 +18,10 @@ import './Breveditor.less';
 
 import { Heading, BodyLong } from '@navikt/ds-react';
 
-type CustomElement = { type: 'paragraph'; align?: string; children: CustomText[] };
-type CustomHeading = { type: 'heading'; align?: string; children: CustomText[] };
-type CustomQuote = { type: 'block-quote'; align?: string; children: CustomText[] };
-type CustomList = { type: 'list-item'; align?: string; children: CustomText[]};
+type CustomElement = { [key: string]: any, type: 'paragraph'; align?: string; children: CustomText[] };
+type CustomHeading = { [key: string]: any, type: 'heading'; align?: string; children: CustomText[] };
+type CustomQuote = { [key: string]: any, type: 'block-quote'; align?: string; children: CustomText[] };
+type CustomList = { [key: string]: any, type: 'list-item'; align?: string; children: CustomText[]};
 type CustomText = {
     key: string;
     text: string;
