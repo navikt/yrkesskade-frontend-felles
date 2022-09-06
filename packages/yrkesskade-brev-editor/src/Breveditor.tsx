@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { ReactEditor, Slate, withReact, Editable, useSlate, RenderLeafProps, RenderElementProps } from 'slate-react';
 import {
     BaseEditor,
-    Descendant,
     createEditor,
     Transforms,
     Element as SlateElement,
@@ -18,11 +17,11 @@ import './Breveditor.less';
 
 import { Heading, BodyLong } from '@navikt/ds-react';
 
-type CustomElement = { [key: string]: any, type: 'paragraph'; align?: string; children: CustomText[] };
-type CustomHeading = { [key: string]: any, type: 'heading'; align?: string; children: CustomText[] };
-type CustomQuote = { [key: string]: any, type: 'block-quote'; align?: string; children: CustomText[] };
-type CustomList = { [key: string]: any, type: 'list-item'; align?: string; children: CustomText[]};
-type CustomText = {
+export type CustomElement = { [key: string]: any, type: 'paragraph'; align?: string; children: CustomText[] };
+export type CustomHeading = { [key: string]: any, type: 'heading'; align?: string; children: CustomText[] };
+export type CustomQuote = { [key: string]: any, type: 'block-quote'; align?: string; children: CustomText[] };
+export type CustomList = { [key: string]: any, type: 'list-item'; align?: string; children: CustomText[]};
+export type CustomText = {
     key: string;
     text: string;
     bold?: boolean;
@@ -44,7 +43,7 @@ declare module 'slate' {
 }
 
 interface Props {
-    mal: Descendant[] | [];
+    mal: [];
     onBrevChanged: any;
 }
 
