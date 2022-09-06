@@ -4,7 +4,8 @@
       "baseUrl": "./packages",
       "paths": {
         "@navikt/*": ["*/src"]
-      }
+      },
+      "noImplicitAny": false,
     },
     "exclude": ["**/*.stories.tsx", "node_modules", "dist"]
   }
