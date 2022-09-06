@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-brev-editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Brev editor for yrkesskade saksbehandling",
   "author": "NAV",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
