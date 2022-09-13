@@ -142,7 +142,7 @@ const toggleBlock = (editor: Editor, format: string) => {
     } else {
         const type = isActive ? 'paragraph' : isList ? 'list-item' : format;
         newProperties = {
-            type: type as ElementTypes//'paragraph' | 'block-quote' | 'heading' | undefined
+            type: type as ElementTypes
         };
     }
     Transforms.setNodes<SlateElement>(editor, newProperties);

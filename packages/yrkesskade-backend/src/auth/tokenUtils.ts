@@ -26,11 +26,13 @@ export const getTokenFromRequest = (req: Request): string | undefined => {
 };
 
 const loggOgReturnerOmTokenErGyldig = (req: Request, validAccessToken: boolean) => {
-    logRequest(
-        req,
-        `Har ${validAccessToken ? 'gyldig token' : 'ikke gyldig token'}}`,
-        LOG_LEVEL.INFO,
-    );
+    if (!validAccessToken) {
+        logRequest(
+            req,
+            `Har ikke gyldig token`,
+            LOG_LEVEL.DEBUG,
+        );
+    }
     return validAccessToken;
 };
 
