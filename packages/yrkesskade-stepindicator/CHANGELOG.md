@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.17](https://github.com/navikt/yrkesskade-frontend-felles/compare/@navikt/yrkesskade-stepindicator@0.0.16...@navikt/yrkesskade-stepindicator@0.0.17) (2022-09-13)
+
+**Note:** Version bump only for package @navikt/yrkesskade-stepindicator
+
+
+
+
+
 ## [0.0.16](https://github.com/navikt/yrkesskade-frontend-felles/compare/@navikt/yrkesskade-stepindicator@0.0.15...@navikt/yrkesskade-stepindicator@0.0.16) (2022-09-06)
 
 **Note:** Version bump only for package @navikt/yrkesskade-stepindicator
