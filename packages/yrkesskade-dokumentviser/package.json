@@ -1,6 +1,6 @@
 {
   "name": "@navikt/yrkesskade-dokumentviser",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Dokumentviser yrkesskade",
   "author": "NAV",
   "homepage": "https://github.com/navikt/yrkesskade-frontend-felles#readme",
