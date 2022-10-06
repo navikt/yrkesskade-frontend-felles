@@ -7,9 +7,8 @@ const meldingEnum = {
     tannlegeerklæring: tannlegeerklæring,
 };
 
-const onBrevChanged = brev => {
-    console.log(brev);
-};
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const onBrevChanged = brev => {};
 
 export default {
     title: 'Komponenter/Breveditor',

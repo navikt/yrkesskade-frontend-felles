@@ -5,28 +5,32 @@ interface BaseProps {
     className: string;
     [key: string]: unknown;
 }
+type Props = PropsWithChildren<BaseProps>;
+export type Ref = HTMLDivElement;
 
-export const Toolbar = React.forwardRef(({ className, ...props }: PropsWithChildren<BaseProps>) => (
-    <Menu
-        {...props}
-        // ref={ref}
-        className={cx(
-            className,
-            css`
-                position: relative;
-                margin: 0 0;
-                border-bottom: 1px solid black;
-                display: flex;
-                align-items: center;
-            `,
-        )}
-    />
-));
+export const Toolbar = React.forwardRef<Ref, Props>(
+    ({ className, ...props }: PropsWithChildren<BaseProps>, ref) => (
+        <Menu
+            {...props}
+            ref={ref}
+            className={cx(
+                className,
+                css`
+                    position: relative;
+                    margin: 0 0;
+                    border-bottom: 1px solid black;
+                    display: flex;
+                    align-items: center;
+                `,
+            )}
+        />
+    ),
+);
 
-export const Menu = React.forwardRef(({ className, ...props }: PropsWithChildren<BaseProps>) => (
+export const Menu = React.forwardRef<Ref, Props>(({ className, ...props }: Props, ref) => (
     <div
         {...props}
-        // ref={ref}
+        ref={ref}
         className={cx(
             className,
             css`

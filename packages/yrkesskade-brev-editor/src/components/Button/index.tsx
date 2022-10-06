@@ -1,31 +1,33 @@
 import React, { PropsWithChildren } from 'react';
 import { cx, css } from '@emotion/css';
 
+type Props = PropsWithChildren<{ active: boolean; reversed: boolean }>;
 interface BaseProps {
     className: string;
     [key: string]: unknown;
 }
 
-export const Button = React.forwardRef(
-    ({
-        className,
-        active,
-        reversed,
-        ...props
-    }: PropsWithChildren<
-        {
-            active: boolean;
-            reversed: boolean;
-        } & BaseProps
-    >) => (
+export type Ref = HTMLSpanElement;
+
+export const Button = React.forwardRef<Ref, Props & BaseProps>(
+    ({ className, active, reversed, ...props }: Props & BaseProps, ref) => (
         <span
             {...props}
-            // ref={ref}
+            ref={ref}
             className={cx(
                 className,
                 css`
                     cursor: pointer;
-                    color: ${reversed ? (active ? 'white' : '#aaa') : active ? 'black' : '#ccc'};
+                    color: ${reversed ? (active ? 'white' : 'black') : active ? 'white' : 'black'};
+                    background-color: ${reversed
+                        ? active
+                            ? 'black'
+                            : 'transparent'
+                        : active
+                        ? 'black'
+                        : 'transparent'};
+                    border-radius: 1px;
+                    padding: 0.5rem;
                 `,
             )}
         />

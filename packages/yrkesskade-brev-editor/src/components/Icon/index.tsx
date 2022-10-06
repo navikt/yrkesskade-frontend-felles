@@ -18,7 +18,9 @@ interface BaseProps {
     [key: string]: unknown;
 }
 
-export const Ikon = ({ className }: PropsWithChildren<BaseProps>) => {
+type Props = PropsWithChildren<BaseProps>;
+
+export const Ikon = ({ className }: Props) => {
     let dynamicIcon;
     switch (className) {
         case 'format_bold':
@@ -62,5 +64,4 @@ export const Ikon = ({ className }: PropsWithChildren<BaseProps>) => {
             break;
     }
     return dynamicIcon;
-    // return <Icon>{className.children}</Icon>;
 };
