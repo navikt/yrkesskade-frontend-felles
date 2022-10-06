@@ -22,6 +22,9 @@ interface DokumentviserProps extends React.HTMLAttributes<HTMLElement> {
     close: () => void;
 }
 
+/**
+ * PDF Dokumentviser som tar en base64 eller url.
+ */
 export const Dokumentviser = ({ url, tittel, close, ...props }: DokumentviserProps) => {
     const [pdfWidth] = useState<number>(getSavedPdfWidth);
     const [transformedUrl, setTransformedUrl] = useState<string | undefined>();
