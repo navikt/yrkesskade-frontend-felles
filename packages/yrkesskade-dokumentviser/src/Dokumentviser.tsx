@@ -9,12 +9,10 @@ import {
     StyledHeaderButton,
     StyledHeaderLink,
 } from './styled-components';
-import { ZoomIn, ZoomOut, ExternalLink, Close, Print } from '@navikt/ds-icons';
+import { ExternalLink, Close, Print } from '@navikt/ds-icons';
 import { b64ToBlobUrl } from './blobUtil';
 
 const MIN_PDF_WIDTH = 400;
-const ZOOM_STEP = 150;
-const MAX_PDF_WIDTH = MIN_PDF_WIDTH + ZOOM_STEP * 10;
 
 const PDF_WITH_LOCAL_STORAGE_KEY = 'documentWidth';
 
@@ -25,9 +23,7 @@ interface DokumentviserProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export const Dokumentviser = ({ url, tittel, close, ...props }: DokumentviserProps) => {
-    const [pdfWidth, setPdfWidth] = useState<number>(getSavedPdfWidth);
-    const increase = () => setPdfWidth(Math.min(pdfWidth + ZOOM_STEP, MAX_PDF_WIDTH));
-    const decrease = () => setPdfWidth(Math.max(pdfWidth - ZOOM_STEP, MIN_PDF_WIDTH));
+    const [pdfWidth] = useState<number>(getSavedPdfWidth);
     const [transformedUrl, setTransformedUrl] = useState<string | undefined>();
 
     useEffect(
@@ -63,12 +59,6 @@ export const Dokumentviser = ({ url, tittel, close, ...props }: DokumentviserPro
         <Container width={pdfWidth} {...props}>
             <Header>
                 <HeaderSubContainer>
-                    <StyledHeaderButton onClick={decrease} title="Zoom ut på PDF">
-                        <ZoomOut />
-                    </StyledHeaderButton>
-                    <StyledHeaderButton onClick={increase} title="Zoom inn på PDF">
-                        <ZoomIn />
-                    </StyledHeaderButton>
                     <StyledDocumentTitle>{tittel}</StyledDocumentTitle>
                 </HeaderSubContainer>
                 <HeaderSubContainer>
