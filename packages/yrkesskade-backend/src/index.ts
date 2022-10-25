@@ -4,6 +4,7 @@ import express, { Express, Request, Response, Router } from 'express';
 import headers from './headers';
 import { configureAuthenticationAndVerification } from './routes/authenticate';
 import configureRouter from './router';
+import { metricsMiddleware } from './middleware/prometheus';
 
 export interface IApp {
     app: Express;
@@ -22,6 +23,8 @@ export default async (options: IAppOptions): Promise<IApp> => {
     app.use(express.json());
 
     headers.setup(app);
+
+    app.use(metricsMiddleware);
 
     // health checks
     app.get([`/internal/isAlive`, `/internal/isReady`], (_req: Request, res: Response) =>
