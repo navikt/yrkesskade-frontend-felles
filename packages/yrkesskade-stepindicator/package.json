@@ -16,7 +16,8 @@
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build": "yarn run clean && yarn run copy-less && yarn run copy-svg && yarn run tsc",
